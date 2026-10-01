@@ -1,0 +1,946 @@
+{
+  "$schema": "./crochet-data.schema.json",
+  "version": 1,
+  "locale": "es",
+  "levels": [
+    {
+      "id": "nivel-0",
+      "order": 0,
+      "title": "Primer contacto",
+      "subtitle": "Tus primeras puntadas",
+      "description": "Conoce tus herramientas, sujeta la aguja con confianza y crea tu primera cadena.",
+      "range": [0, 15],
+      "techniques": ["nudo-corredizo", "cadeneta", "punto-deslizado"]
+    },
+    {
+      "id": "nivel-1",
+      "order": 1,
+      "title": "Puntos esenciales",
+      "subtitle": "Los ladrillos del tejido",
+      "description": "Los puntos básicos con los que se construye cualquier patrón, y cómo contarlos sin perderte.",
+      "range": [15, 35],
+      "techniques": ["punto-bajo", "medio-punto-alto", "punto-alto"]
+    },
+    {
+      "id": "nivel-2",
+      "order": 2,
+      "title": "Tejido en redondo",
+      "subtitle": "La técnica del amigurumi",
+      "description": "Empieza en un anillo mágico y da forma con aumentos y disminuciones tejiendo en espiral.",
+      "range": [35, 55],
+      "techniques": ["anillo-magico", "aumento", "disminucion-invisible", "tejer-en-espiral"]
+    },
+    {
+      "id": "nivel-3",
+      "order": 3,
+      "title": "Amigurumi",
+      "subtitle": "Del patrón al muñeco",
+      "description": "Rellena, cierra, une piezas y da personalidad a tus muñecos con detalles bordados.",
+      "range": [55, 80],
+      "techniques": ["rellenar-y-cerrar", "unir-piezas", "bordar-detalles", "cambio-de-color"]
+    },
+    {
+      "id": "nivel-4",
+      "order": 4,
+      "title": "Experto",
+      "subtitle": "Tu propio estilo",
+      "description": "Texturas, estructuras firmes y el salto final: diseñar tus propios patrones.",
+      "range": [80, 100],
+      "techniques": ["hebra-trasera", "punto-popcorn", "diseno-de-patrones"]
+    }
+  ],
+  "techniques": [
+    {
+      "id": "nudo-corredizo",
+      "name": "Nudo corredizo",
+      "level": "nivel-0",
+      "status": "draft",
+      "summary": "El nudo ajustable con el que empieza casi toda labor: crea el primer bucle sobre la aguja.",
+      "difficulty": 1,
+      "estimatedMinutes": 5,
+      "prerequisites": [],
+      "materials": ["aguja-croche", "hilo"],
+      "steps": []
+    },
+    {
+      "id": "cadeneta",
+      "name": "Cadeneta",
+      "abbr": { "es": "cad", "us": "ch", "uk": "ch" },
+      "level": "nivel-0",
+      "status": "published",
+      "summary": "La base de casi todo tejido: una fila de bucles encadenados para empezar labores, formar arcos y dar altura a las vueltas.",
+      "difficulty": 1,
+      "estimatedMinutes": 10,
+      "prerequisites": ["nudo-corredizo"],
+      "materials": ["aguja-croche", "hilo", "tijeras"],
+      "tips": [
+        "Practica con hilo liso de color claro y grosor medio (3–4) y una aguja de 4–5 mm: verás cada bucle con claridad.",
+        "Las cadenetas deben quedar holgadas: tendrás que volver a meter la aguja en ellas en la siguiente vuelta.",
+        "Mueve la pinza de la mano izquierda hacia arriba cada pocas cadenetas para mantener la tensión pareja."
+      ],
+      "commonMistakes": [
+        "Formar los bucles en la garganta en vez de en el cuerpo de la aguja: salen puntos diminutos y desiguales.",
+        "Hacer la lazada de adelante hacia atrás: las cadenetas quedan retorcidas.",
+        "Contar el nudo corredizo o el bucle de la aguja como cadenetas."
+      ],
+      "stage": {
+        "viewBox": [20, 40, 330, 264],
+        "hook": { "type": "ergonomica", "tip": [87, 120], "radius": 6 }
+      },
+      "geometry": {
+        "cola": "M 147 165 C 144 192, 137 226, 142 266",
+        "nudo": "M 144 152 C 154 146, 162 156, 155 163 C 149 168, 140 161, 145 155 C 149 151, 156 157, 152 161",
+        "bucle-libre-frente": "M 150 96 C 133 96, 133 150, 150 150",
+        "bucle-libre-detras": "M 150 150 C 167 150, 167 96, 150 96",
+        "bucle-frente": "M 150 104 C 137 104, 137 150, 150 150",
+        "bucle-detras": "M 150 150 C 163 150, 163 104, 150 104",
+        "eslabon-frente": "M 150 142 C 135 142, 135 176, 150 176",
+        "eslabon-detras": "M 150 176 C 165 176, 165 142, 150 142",
+        "hebra-reposo": "M 152 148 C 146 134, 134 118, 120 104 C 96 80, 48 36, 8 14",
+        "hebra-subida": "M 152 148 C 146 134, 128 112, 115 106",
+        "hebra-subida-tirar": "M 152 148 C 160 132, 180 112, 191 106",
+        "hebra-garganta": "M 115 106 Q 108 112 107 122",
+        "hebra-alimentacion": "M 107 122 C 100 131, 86 128, 76 110 C 62 84, 36 40, 8 14",
+        "hebra-alimentacion-tirar": "M 183 122 C 176 131, 150 140, 120 110 C 92 82, 40 38, 8 14",
+        "bucle-nuevo-estirado-frente": "M 191 106 C 178 101, 152 118, 150 140",
+        "bucle-nuevo-estirado-detras": "M 150 140 C 168 140, 197 126, 191 106",
+        "flecha-introducir": "M 268 92 L 184 92",
+        "flecha-lazada": "M 132 100 C 126 82, 100 82, 98 100",
+        "flecha-tirar": "M 168 90 L 258 90",
+        "anillo-bucle-libre": "M 150 84 C 180 84, 180 162, 150 162 C 120 162, 120 84, 150 84",
+        "anillo-eslabon": "M 150 136 C 176 136, 176 182, 150 182 C 124 182, 124 136, 150 136"
+      },
+      "steps": [
+        {
+          "id": "sujetar",
+          "phase": "hold",
+          "title": "Sujeta la aguja y el hilo",
+          "instruction": "Toma la aguja con la mano derecha como si fuera un lápiz, con la garganta mirando hacia ti. Con la izquierda, pinza el nudo corredizo entre el pulgar y el dedo medio, y pasa la hebra que viene del ovillo por encima del índice.",
+          "tip": "El índice levantado mantiene la hebra tirante sin estrangularla: esa es tu tensión. Si tejes con la mano izquierda, haz todo en espejo.",
+          "durationMs": 5600,
+          "scene": {
+            "hook": {
+              "translate": [[0, [300, 0]], [0.12, [300, 0]], [0.5, [140, 0], "easeOut"]],
+              "opacity": [[0.12, 0], [0.3, 1]]
+            },
+            "layers": [
+              { "id": "mano-indice", "role": "hand", "depth": "back", "d": "@mano-indice", "opacity": [[0.45, 0], [0.6, 1]] },
+              { "id": "mano-pinza-medio", "role": "hand", "depth": "back", "d": "@mano-pinza-medio", "opacity": [[0.55, 0], [0.7, 1]] },
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "draw": { "from": 0, "to": 0.18 } },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "draw": { "from": 0.1, "to": 0.26 } },
+              { "id": "bucle-detras", "role": "yarn", "depth": "back", "d": "@bucle-libre-detras", "draw": { "from": 0.2, "to": 0.34 } },
+              { "id": "hebra-trabajo", "role": "yarn", "depth": "back", "d": "@hebra-reposo", "draw": { "from": 0.3, "to": 0.5 } },
+              { "id": "bucle-frente", "role": "yarn", "d": "@bucle-libre-frente", "draw": { "from": 0.24, "to": 0.38 } },
+              { "id": "mano-pinza-pulgar", "role": "hand", "d": "@mano-pinza-pulgar", "opacity": [[0.55, 0], [0.7, 1]] },
+              { "id": "mano-derecha", "role": "hand", "d": "@mano-derecha", "opacity": [[0.62, 0], [0.78, 1]] }
+            ],
+            "callouts": [
+              { "id": "indice", "text": "Índice: guía la hebra", "at": [60, 62], "placement": "bottom", "align": "start", "show": { "from": 0.64 } },
+              { "id": "pinza", "text": "Pulgar y medio: sujetan el nudo", "at": [150, 196], "placement": "bottom", "show": { "from": 0.74 } },
+              { "id": "derecha", "text": "Mano derecha: como un lápiz", "at": [340, 170], "placement": "bottom", "align": "end", "show": { "from": 0.84 } }
+            ]
+          }
+        },
+        {
+          "id": "introducir",
+          "phase": "insert",
+          "title": "Introduce la aguja en el bucle",
+          "instruction": "Mete la punta de la aguja en el bucle del nudo corredizo, de delante hacia atrás. Después tira suavemente de la hebra de trabajo para ajustar el bucle al cuerpo de la aguja.",
+          "tip": "El bucle debe deslizarse sin esfuerzo. Ajústalo sobre el cuerpo, nunca sobre la garganta: el cuerpo es el que da el tamaño a cada punto.",
+          "durationMs": 4800,
+          "scene": {
+            "hook": {
+              "translate": [[0, [140, 0]], [0.1, [140, 0]], [0.6, [0, 0], "easeInOut"]]
+            },
+            "layers": [
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola" },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo" },
+              { "id": "bucle-detras", "role": "yarn", "depth": "back", "d": [[0, "@bucle-libre-detras"], [0.62, "@bucle-libre-detras"], [0.86, "@bucle-detras", "easeOut"]] },
+              { "id": "hebra-trabajo", "role": "yarn", "depth": "back", "d": "@hebra-reposo" },
+              { "id": "bucle-frente", "role": "yarn", "d": [[0, "@bucle-libre-frente"], [0.62, "@bucle-libre-frente"], [0.86, "@bucle-frente", "easeOut"]] },
+              { "id": "foco-bucle", "role": "focus", "d": "@anillo-bucle-libre", "draw": { "from": 0, "to": 0.12 }, "opacity": [[0.3, 1], [0.42, 0]] },
+              { "id": "flecha", "role": "guide", "d": "@flecha-introducir", "marker": "arrow", "draw": { "from": 0.06, "to": 0.3 }, "opacity": [[0.5, 1], [0.62, 0]] }
+            ],
+            "callouts": [
+              { "id": "meter", "text": "Introduce la punta en el bucle", "at": [226, 84], "show": { "from": 0.1, "to": 0.6 } },
+              { "id": "ajustar", "text": "Ajusta: firme, sin apretar", "at": [150, 92], "tone": "success", "show": { "from": 0.74 } }
+            ]
+          }
+        },
+        {
+          "id": "lazada",
+          "phase": "yarn-over",
+          "title": "Haz una lazada",
+          "instruction": "Pasa la hebra de trabajo por encima de la aguja, de atrás hacia adelante, y engánchala en la garganta. Gira apenas la aguja hacia ti para atraparla.",
+          "tip": "Es la aguja la que va a buscar el hilo: mueve la muñeca, no el índice. Siempre de atrás hacia adelante; al revés, las cadenetas salen retorcidas.",
+          "durationMs": 5000,
+          "scene": {
+            "hook": { "rotate": [[0.12, 0], [0.42, -4]] },
+            "layers": [
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola" },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo" },
+              { "id": "bucle-detras", "role": "yarn", "depth": "back", "d": "@bucle-detras" },
+              { "id": "hebra-trabajo", "role": "yarn", "depth": "back", "d": "@hebra-reposo", "active": [[0, 0], [0.14, 1]], "opacity": [[0.26, 1], [0.46, 0]] },
+              { "id": "hebra-subida", "role": "yarn", "depth": "back", "d": "@hebra-subida", "active": 1, "draw": { "from": 0.26, "to": 0.44 } },
+              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "d": "@hebra-alimentacion", "active": 1, "draw": { "from": 0.5, "to": 0.74 } },
+              { "id": "hebra-garganta", "role": "yarn", "attach": "hook", "d": "@hebra-garganta", "active": 1, "draw": { "from": 0.42, "to": 0.52 } },
+              { "id": "bucle-frente", "role": "yarn", "d": "@bucle-frente" },
+              { "id": "flecha", "role": "guide", "d": "@flecha-lazada", "marker": "arrow", "draw": { "from": 0.16, "to": 0.38 }, "opacity": [[0.84, 1], [0.96, 0]] }
+            ],
+            "callouts": [
+              { "id": "hebra", "text": "Hebra de trabajo", "at": [98, 80], "placement": "right", "show": { "from": 0.04, "to": 0.34 } },
+              { "id": "direccion", "text": "De atrás hacia adelante", "at": [116, 76], "show": { "from": 0.4 } }
+            ]
+          }
+        },
+        {
+          "id": "tirar",
+          "phase": "pull-through",
+          "title": "Tira a través del bucle",
+          "instruction": "Con la garganta mirando hacia abajo, tira de la lazada a través del bucle que tienes en la aguja. El bucle viejo se suelta y se convierte en tu primera cadeneta; el nuevo queda en la aguja.",
+          "tip": "Gira la garganta hacia abajo antes de tirar para que no se enganche. Acompaña el gesto subiendo la pinza, pegada a la aguja.",
+          "durationMs": 6000,
+          "scene": {
+            "hook": {
+              "rotate": [[0, -4], [0.1, 0]],
+              "translate": [[0.1, [0, 0]], [0.5, [76, 0], "easeInOut"], [0.6, [76, 0]], [0.92, [0, 0], "easeInOut"]]
+            },
+            "layers": [
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [[0.5, [0, 0]], [0.7, [0, 26], "easeOut"]] },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [[0.5, [0, 0]], [0.7, [0, 26], "easeOut"]] },
+              { "id": "bucle-viejo-detras", "role": "yarn", "depth": "back", "d": [[0, "@bucle-detras"], [0.5, "@bucle-detras"], [0.7, "@eslabon-detras", "easeOut"]] },
+              { "id": "hebra-subida", "role": "yarn", "depth": "back", "active": 1, "d": [[0.1, "@hebra-subida"], [0.5, "@hebra-subida-tirar", "easeInOut"]], "opacity": [[0.52, 1], [0.6, 0]] },
+              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "active": [[0.86, 1], [1, 0]], "d": [[0.1, "@hebra-alimentacion"], [0.5, "@hebra-alimentacion-tirar", "easeInOut"], [0.6, "@hebra-alimentacion-tirar"], [0.92, "@hebra-reposo", "easeInOut"]] },
+              { "id": "bucle-nuevo-detras", "role": "yarn", "depth": "back", "active": [[0.86, 1], [1, 0]], "opacity": [[0.5, 0], [0.58, 1]], "d": [[0.5, "@bucle-nuevo-estirado-detras"], [0.6, "@bucle-nuevo-estirado-detras"], [0.92, "@bucle-detras", "easeInOut"]] },
+              { "id": "hebra-garganta", "role": "yarn", "attach": "hook", "d": "@hebra-garganta", "active": 1, "opacity": [[0.52, 1], [0.6, 0]] },
+              { "id": "bucle-nuevo-frente", "role": "yarn", "active": [[0.86, 1], [1, 0]], "opacity": [[0.5, 0], [0.58, 1]], "d": [[0.5, "@bucle-nuevo-estirado-frente"], [0.6, "@bucle-nuevo-estirado-frente"], [0.92, "@bucle-frente", "easeInOut"]] },
+              { "id": "bucle-viejo-frente", "role": "yarn", "d": [[0, "@bucle-frente"], [0.5, "@bucle-frente"], [0.7, "@eslabon-frente", "easeOut"]] },
+              { "id": "flecha", "role": "guide", "d": "@flecha-tirar", "marker": "arrow", "draw": { "from": 0.08, "to": 0.32 }, "opacity": [[0.46, 1], [0.56, 0]] }
+            ],
+            "callouts": [
+              { "id": "tirar", "text": "Tira a través del bucle", "at": [214, 82], "show": { "from": 0.12, "to": 0.56 } },
+              { "id": "logro", "text": "¡1 cadeneta!", "at": [168, 159], "placement": "right", "tone": "success", "show": { "from": 0.84 } }
+            ]
+          }
+        },
+        {
+          "id": "lazada-2",
+          "phase": "yarn-over",
+          "title": "Repite: otra lazada",
+          "instruction": "Sube la pinza de la mano izquierda hasta justo debajo de la aguja y vuelve a hacer una lazada, de atrás hacia adelante.",
+          "tip": "Sujetar cerca de la aguja da cadenetas parejas: recoloca la pinza cada dos o tres puntos.",
+          "durationMs": 4200,
+          "scene": {
+            "hook": { "rotate": [[0.1, 0], [0.4, -4]] },
+            "layers": [
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [0, 26] },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [0, 26] },
+              { "id": "eslabon-detras", "role": "yarn", "depth": "back", "d": "@eslabon-detras" },
+              { "id": "bucle-detras", "role": "yarn", "depth": "back", "d": "@bucle-detras" },
+              { "id": "hebra-trabajo", "role": "yarn", "depth": "back", "d": "@hebra-reposo", "active": [[0, 0], [0.12, 1]], "opacity": [[0.22, 1], [0.42, 0]] },
+              { "id": "hebra-subida", "role": "yarn", "depth": "back", "d": "@hebra-subida", "active": 1, "draw": { "from": 0.22, "to": 0.42 } },
+              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "d": "@hebra-alimentacion", "active": 1, "draw": { "from": 0.5, "to": 0.76 } },
+              { "id": "hebra-garganta", "role": "yarn", "attach": "hook", "d": "@hebra-garganta", "active": 1, "draw": { "from": 0.4, "to": 0.52 } },
+              { "id": "bucle-frente", "role": "yarn", "d": "@bucle-frente" },
+              { "id": "eslabon-frente", "role": "yarn", "d": "@eslabon-frente" },
+              { "id": "flecha", "role": "guide", "d": "@flecha-lazada", "marker": "arrow", "draw": { "from": 0.12, "to": 0.34 }, "opacity": [[0.84, 1], [0.96, 0]] }
+            ],
+            "callouts": [
+              { "id": "lazada", "text": "Lazada", "at": [116, 76], "show": { "from": 0.36 } }
+            ]
+          }
+        },
+        {
+          "id": "tirar-2",
+          "phase": "pull-through",
+          "title": "Tira otra vez a través del bucle",
+          "instruction": "Tira de la lazada a través del bucle de la aguja. ¡Ya tienes 2 cadenetas! Repite lazada y tirar hasta llegar al número que pida el patrón.",
+          "tip": "Busca un ritmo constante: todas las cadenetas deben medir lo mismo y dejar espacio para meter la punta de la aguja.",
+          "durationMs": 5200,
+          "scene": {
+            "hook": {
+              "rotate": [[0, -4], [0.1, 0]],
+              "translate": [[0.1, [0, 0]], [0.5, [76, 0], "easeInOut"], [0.6, [76, 0]], [0.92, [0, 0], "easeInOut"]]
+            },
+            "layers": [
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [[0.5, [0, 26]], [0.7, [0, 52], "easeOut"]] },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [[0.5, [0, 26]], [0.7, [0, 52], "easeOut"]] },
+              { "id": "eslabon-detras", "role": "yarn", "depth": "back", "d": "@eslabon-detras", "translate": [[0.5, [0, 0]], [0.7, [0, 26], "easeOut"]] },
+              { "id": "bucle-viejo-detras", "role": "yarn", "depth": "back", "d": [[0, "@bucle-detras"], [0.5, "@bucle-detras"], [0.7, "@eslabon-detras", "easeOut"]] },
+              { "id": "hebra-subida", "role": "yarn", "depth": "back", "active": 1, "d": [[0.1, "@hebra-subida"], [0.5, "@hebra-subida-tirar", "easeInOut"]], "opacity": [[0.52, 1], [0.6, 0]] },
+              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "active": [[0.86, 1], [1, 0]], "d": [[0.1, "@hebra-alimentacion"], [0.5, "@hebra-alimentacion-tirar", "easeInOut"], [0.6, "@hebra-alimentacion-tirar"], [0.92, "@hebra-reposo", "easeInOut"]] },
+              { "id": "bucle-nuevo-detras", "role": "yarn", "depth": "back", "active": [[0.86, 1], [1, 0]], "opacity": [[0.5, 0], [0.58, 1]], "d": [[0.5, "@bucle-nuevo-estirado-detras"], [0.6, "@bucle-nuevo-estirado-detras"], [0.92, "@bucle-detras", "easeInOut"]] },
+              { "id": "hebra-garganta", "role": "yarn", "attach": "hook", "d": "@hebra-garganta", "active": 1, "opacity": [[0.52, 1], [0.6, 0]] },
+              { "id": "bucle-nuevo-frente", "role": "yarn", "active": [[0.86, 1], [1, 0]], "opacity": [[0.5, 0], [0.58, 1]], "d": [[0.5, "@bucle-nuevo-estirado-frente"], [0.6, "@bucle-nuevo-estirado-frente"], [0.92, "@bucle-frente", "easeInOut"]] },
+              { "id": "bucle-viejo-frente", "role": "yarn", "d": [[0, "@bucle-frente"], [0.5, "@bucle-frente"], [0.7, "@eslabon-frente", "easeOut"]] },
+              { "id": "eslabon-frente", "role": "yarn", "d": "@eslabon-frente", "translate": [[0.5, [0, 0]], [0.7, [0, 26], "easeOut"]] },
+              { "id": "flecha", "role": "guide", "d": "@flecha-tirar", "marker": "arrow", "draw": { "from": 0.08, "to": 0.32 }, "opacity": [[0.46, 1], [0.56, 0]] }
+            ],
+            "callouts": [
+              { "id": "logro", "text": "¡2 cadenetas!", "at": [168, 159], "placement": "right", "tone": "success", "show": { "from": 0.84 } }
+            ]
+          }
+        },
+        {
+          "id": "contar",
+          "phase": "hold",
+          "title": "Cuenta tus cadenetas",
+          "instruction": "Cuenta las «V» desde el nudo hacia la aguja. No cuentes el nudo corredizo ni el bucle que queda en la aguja.",
+          "tip": "En los patrones, «8 cad» significa repetir lazada y tirar 8 veces. Si te cuesta contar, coloca un marcador cada 10 cadenetas.",
+          "durationMs": 5600,
+          "scene": {
+            "layers": [
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [0, 52] },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [0, 52] },
+              { "id": "eslabon-1-detras", "role": "yarn", "depth": "back", "d": "@eslabon-detras", "translate": [0, 26] },
+              { "id": "eslabon-2-detras", "role": "yarn", "depth": "back", "d": "@eslabon-detras" },
+              { "id": "bucle-detras", "role": "yarn", "depth": "back", "d": "@bucle-detras" },
+              { "id": "hebra-trabajo", "role": "yarn", "depth": "back", "d": "@hebra-reposo" },
+              { "id": "bucle-frente", "role": "yarn", "d": "@bucle-frente" },
+              { "id": "eslabon-2-frente", "role": "yarn", "d": "@eslabon-frente" },
+              { "id": "eslabon-1-frente", "role": "yarn", "d": "@eslabon-frente", "translate": [0, 26] },
+              { "id": "foco-1", "role": "focus", "d": "@anillo-eslabon", "translate": [0, 26], "draw": { "from": 0.08, "to": 0.24 } },
+              { "id": "foco-2", "role": "focus", "d": "@anillo-eslabon", "draw": { "from": 0.32, "to": 0.48 } }
+            ],
+            "callouts": [
+              { "id": "uno", "text": "1", "at": [172, 185], "placement": "right", "tone": "success", "show": { "from": 0.22 } },
+              { "id": "dos", "text": "2", "at": [172, 159], "placement": "right", "tone": "success", "show": { "from": 0.46 } },
+              { "id": "bucle", "text": "No se cuenta", "at": [150, 96], "tone": "warning", "show": { "from": 0.62 } },
+              { "id": "nudo", "text": "Nudo: no se cuenta", "at": [168, 211], "placement": "right", "tone": "warning", "show": { "from": 0.74 } }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "punto-deslizado",
+      "name": "Punto deslizado",
+      "abbr": { "es": "pd", "us": "sl st", "uk": "ss" },
+      "level": "nivel-0",
+      "status": "draft",
+      "summary": "El punto más bajo: une vueltas, cierra círculos y desplaza el hilo sin añadir altura.",
+      "difficulty": 1,
+      "estimatedMinutes": 8,
+      "prerequisites": ["cadeneta"],
+      "steps": []
+    },
+    {
+      "id": "punto-bajo",
+      "name": "Punto bajo",
+      "abbr": { "es": "pb", "us": "sc", "uk": "dc" },
+      "level": "nivel-1",
+      "status": "draft",
+      "summary": "El punto estrella del amigurumi: compacto, firme y sin huecos para que no asome el relleno.",
+      "difficulty": 1,
+      "estimatedMinutes": 12,
+      "prerequisites": ["cadeneta"],
+      "steps": []
+    },
+    {
+      "id": "medio-punto-alto",
+      "name": "Medio punto alto",
+      "abbr": { "es": "mpa", "us": "hdc", "uk": "htr" },
+      "level": "nivel-1",
+      "status": "draft",
+      "summary": "Un punto intermedio con una lazada extra: más alto que el punto bajo y con un tejido flexible.",
+      "difficulty": 2,
+      "estimatedMinutes": 12,
+      "prerequisites": ["punto-bajo"],
+      "steps": []
+    },
+    {
+      "id": "punto-alto",
+      "name": "Punto alto",
+      "abbr": { "es": "pa", "us": "dc", "uk": "tr" },
+      "level": "nivel-1",
+      "status": "draft",
+      "summary": "Un punto alto y aireado que avanza rápido: mantas, prendas y encajes.",
+      "difficulty": 2,
+      "estimatedMinutes": 15,
+      "prerequisites": ["medio-punto-alto"],
+      "steps": []
+    },
+    {
+      "id": "anillo-magico",
+      "name": "Anillo mágico",
+      "abbr": { "es": "AM", "us": "MR", "uk": "MR" },
+      "level": "nivel-2",
+      "status": "draft",
+      "summary": "Un inicio ajustable que se cierra por completo: el centro de tu amigurumi queda sin agujero.",
+      "difficulty": 2,
+      "estimatedMinutes": 15,
+      "prerequisites": ["punto-bajo"],
+      "steps": []
+    },
+    {
+      "id": "aumento",
+      "name": "Aumento",
+      "abbr": { "es": "aum", "us": "inc", "uk": "inc" },
+      "level": "nivel-2",
+      "status": "draft",
+      "summary": "Dos puntos en el mismo punto de la vuelta anterior: así crecen los círculos y las esferas.",
+      "difficulty": 2,
+      "estimatedMinutes": 8,
+      "prerequisites": ["punto-bajo"],
+      "steps": []
+    },
+    {
+      "id": "disminucion-invisible",
+      "name": "Disminución invisible",
+      "abbr": { "es": "dism", "us": "inv dec", "uk": "inv dec" },
+      "level": "nivel-2",
+      "status": "draft",
+      "summary": "Une dos puntos en uno tomando solo las hebras delanteras: cierra formas sin dejar huecos visibles.",
+      "difficulty": 3,
+      "estimatedMinutes": 10,
+      "prerequisites": ["punto-bajo"],
+      "steps": []
+    },
+    {
+      "id": "tejer-en-espiral",
+      "name": "Tejer en espiral",
+      "level": "nivel-2",
+      "status": "draft",
+      "summary": "Vueltas continuas sin cerrar con punto deslizado, guiadas por un marcador de puntos.",
+      "difficulty": 2,
+      "estimatedMinutes": 15,
+      "prerequisites": ["anillo-magico", "aumento"],
+      "materials": ["marcadores"],
+      "steps": []
+    },
+    {
+      "id": "rellenar-y-cerrar",
+      "name": "Rellenar y cerrar",
+      "level": "nivel-3",
+      "status": "draft",
+      "summary": "Cuánto relleno usar, cómo repartirlo y cómo cerrar el último agujero sin que se note.",
+      "difficulty": 2,
+      "estimatedMinutes": 15,
+      "prerequisites": ["disminucion-invisible"],
+      "materials": ["relleno", "aguja-lanera"],
+      "steps": []
+    },
+    {
+      "id": "unir-piezas",
+      "name": "Unir piezas",
+      "level": "nivel-3",
+      "status": "draft",
+      "summary": "Coser brazos, orejas y patas con puntadas invisibles para un acabado profesional.",
+      "difficulty": 3,
+      "estimatedMinutes": 20,
+      "prerequisites": ["punto-bajo"],
+      "materials": ["aguja-lanera", "alfileres"],
+      "steps": []
+    },
+    {
+      "id": "bordar-detalles",
+      "name": "Bordar detalles",
+      "level": "nivel-3",
+      "status": "draft",
+      "summary": "Ojos, bocas y mejillas bordados: la expresión que da vida a cada amigurumi.",
+      "difficulty": 2,
+      "estimatedMinutes": 15,
+      "prerequisites": [],
+      "materials": ["aguja-lanera"],
+      "steps": []
+    },
+    {
+      "id": "cambio-de-color",
+      "name": "Cambio de color",
+      "level": "nivel-3",
+      "status": "draft",
+      "summary": "Cambia de hilo en el último paso del punto para que las franjas queden limpias.",
+      "difficulty": 2,
+      "estimatedMinutes": 10,
+      "prerequisites": ["punto-bajo"],
+      "steps": []
+    },
+    {
+      "id": "hebra-trasera",
+      "name": "Solo hebra trasera",
+      "abbr": { "es": "ht", "us": "BLO", "uk": "BLO" },
+      "level": "nivel-4",
+      "status": "draft",
+      "summary": "Tejer por una sola hebra crea rebordes y bases planas: el secreto de las estructuras firmes.",
+      "difficulty": 3,
+      "estimatedMinutes": 10,
+      "prerequisites": ["punto-bajo"],
+      "steps": []
+    },
+    {
+      "id": "punto-popcorn",
+      "name": "Punto popcorn",
+      "level": "nivel-4",
+      "status": "draft",
+      "summary": "Grupos de puntos altos que se cierran juntos y forman relieves redondeados.",
+      "difficulty": 4,
+      "estimatedMinutes": 20,
+      "prerequisites": ["punto-alto"],
+      "steps": []
+    },
+    {
+      "id": "diseno-de-patrones",
+      "name": "Diseño de patrones",
+      "level": "nivel-4",
+      "status": "draft",
+      "summary": "Calcula aumentos y disminuciones para crear tus propias formas y escribir patrones claros.",
+      "difficulty": 5,
+      "estimatedMinutes": 40,
+      "prerequisites": ["tejer-en-espiral", "disminucion-invisible"],
+      "steps": []
+    }
+  ],
+  "tools": {
+    "hooks": [
+      {
+        "id": "ergonomica",
+        "name": "Ergonómica",
+        "aka": ["Mango blando", "Soft grip"],
+        "material": "aluminio",
+        "description": "Cabeza en línea con un mango grueso de silicona que reparte la presión de la mano.",
+        "bestFor": "Principiantes y sesiones largas: reduce la fatiga y el dolor de muñeca.",
+        "sizesMm": [2, 8],
+        "profile": {
+          "headRadius": 1,
+          "neckRadius": 1,
+          "tipLength": 1.7,
+          "lipLength": 2.2,
+          "throatDepth": 0.62,
+          "throatLength": 2.4,
+          "shaftLength": 20,
+          "grip": { "length": 7, "halfWidth": 1.6 },
+          "handle": { "style": "sleeve", "length": 16, "radius": 2.3 }
+        }
+      },
+      {
+        "id": "en-linea",
+        "name": "En línea",
+        "aka": ["Inline", "Tipo Bates"],
+        "material": "aluminio",
+        "description": "La cabeza tiene el mismo grosor que el cuerpo y la garganta es un corte profundo y recto. La punta es más afilada.",
+        "bestFor": "Amigurumi y puntos apretados: la punta entra con precisión en puntos pequeños.",
+        "sizesMm": [2, 10],
+        "profile": {
+          "headRadius": 1,
+          "neckRadius": 1,
+          "tipLength": 1.9,
+          "lipLength": 2.2,
+          "throatDepth": 0.66,
+          "throatLength": 2.4,
+          "shaftLength": 20,
+          "grip": { "length": 7, "halfWidth": 1.6 },
+          "handle": { "style": "rod", "length": 16, "radius": 1.1 }
+        }
+      },
+      {
+        "id": "conica",
+        "name": "Cónica",
+        "aka": ["Tapered", "Tipo Boye"],
+        "material": "aluminio",
+        "description": "La cabeza es más ancha que la garganta, que se estrecha antes de llegar al cuerpo. La punta es redondeada.",
+        "bestFor": "Tejer con soltura y rapidez: los bucles se deslizan con facilidad.",
+        "sizesMm": [2, 10],
+        "profile": {
+          "headRadius": 1.18,
+          "neckRadius": 0.8,
+          "tipLength": 1.5,
+          "lipLength": 2,
+          "throatDepth": 0.45,
+          "throatLength": 2.8,
+          "shaftLength": 20,
+          "grip": { "length": 7, "halfWidth": 1.6 },
+          "handle": { "style": "rod", "length": 16, "radius": 1.1 }
+        }
+      },
+      {
+        "id": "bambu",
+        "name": "De bambú",
+        "aka": ["Madera"],
+        "material": "bambu",
+        "description": "Ligera y cálida al tacto; su superficie retiene un poco el hilo.",
+        "bestFor": "Hilos resbaladizos (seda, bambú, mercerizados) y personas que tejen muy apretado.",
+        "sizesMm": [3.5, 12],
+        "profile": {
+          "headRadius": 1.08,
+          "neckRadius": 0.9,
+          "tipLength": 1.6,
+          "lipLength": 2,
+          "throatDepth": 0.5,
+          "throatLength": 2.6,
+          "shaftLength": 20,
+          "grip": { "length": 7, "halfWidth": 1.5 },
+          "handle": { "style": "rod", "length": 16, "radius": 1.15 }
+        }
+      },
+      {
+        "id": "acero",
+        "name": "De acero",
+        "aka": ["Para hilo fino", "Steel"],
+        "material": "acero",
+        "description": "Muy finas y rígidas, pensadas para hilo de algodón fino y encaje.",
+        "bestFor": "Puntillas, encajes y mini amigurumis con hilo muy fino.",
+        "sizesMm": [0.6, 1.75],
+        "profile": {
+          "headRadius": 1,
+          "neckRadius": 0.95,
+          "tipLength": 2,
+          "lipLength": 2.4,
+          "throatDepth": 0.6,
+          "throatLength": 2.6,
+          "shaftLength": 20,
+          "grip": { "length": 7, "halfWidth": 1.9 },
+          "handle": { "style": "rod", "length": 16, "radius": 1.25 }
+        }
+      }
+    ],
+    "hookAnatomy": [
+      {
+        "id": "punta",
+        "name": "Punta",
+        "role": "Entra en el punto",
+        "description": "Abre camino entre las hebras. Una punta afilada entra mejor en puntos apretados; una redondeada no parte el hilo."
+      },
+      {
+        "id": "garganta",
+        "name": "Garganta",
+        "role": "Atrapa la hebra",
+        "description": "El corte donde se engancha la lazada. Vigila hacia dónde mira: su orientación decide si el hilo se queda o se escapa."
+      },
+      {
+        "id": "cuerpo",
+        "name": "Cuerpo (caña)",
+        "role": "Da el tamaño al punto",
+        "description": "Su diámetro es la medida de la aguja (por ejemplo, 3 mm). Forma siempre los bucles aquí, no en la garganta, para que todos los puntos midan igual."
+      },
+      {
+        "id": "apoyo",
+        "name": "Apoyo del pulgar",
+        "role": "Da control",
+        "description": "Zona aplanada donde descansan el pulgar y el índice. Suele llevar grabado el tamaño de la aguja."
+      },
+      {
+        "id": "mango",
+        "name": "Mango",
+        "role": "Equilibra la aguja",
+        "description": "Descansa en la palma o entre los dedos. Un mango grueso reparte la presión y cansa menos la mano."
+      }
+    ],
+    "yarnWeights": [
+      {
+        "id": "0-encaje",
+        "cyc": 0,
+        "name": "Encaje",
+        "aka": ["Lace", "Hilo de crochet nº 10"],
+        "hookMm": [1.4, 2.25],
+        "uses": "Puntillas, encajes y tapetes.",
+        "amigurumi": "Solo para micro-amigurumis, con aguja de acero de 0.75–1.25 mm.",
+        "strandWidth": 2
+      },
+      {
+        "id": "1-superfino",
+        "cyc": 1,
+        "name": "Superfino",
+        "aka": ["Super fine", "Fingering", "Calcetín"],
+        "hookMm": [2.25, 3.5],
+        "uses": "Calcetines, prendas de bebé ligeras y chales finos.",
+        "amigurumi": "Mini amigurumis y llaveros: aguja de 1.75–2.25 mm.",
+        "strandWidth": 3
+      },
+      {
+        "id": "2-fino",
+        "cyc": 2,
+        "name": "Fino",
+        "aka": ["Fine", "Sport", "Baby"],
+        "hookMm": [3.5, 4.5],
+        "uses": "Prendas de bebé, accesorios y ropa ligera.",
+        "amigurumi": "Muy usado en algodón fino: aguja de 2–2.5 mm.",
+        "strandWidth": 4.5
+      },
+      {
+        "id": "3-ligero",
+        "cyc": 3,
+        "name": "Ligero",
+        "aka": ["Light", "DK", "Light worsted"],
+        "hookMm": [4.5, 5.5],
+        "uses": "Ropa, mantas ligeras y amigurumis.",
+        "amigurumi": "El favorito del amigurumi: aguja de 2.5–3.5 mm para un tejido compacto.",
+        "strandWidth": 6
+      },
+      {
+        "id": "4-medio",
+        "cyc": 4,
+        "name": "Medio",
+        "aka": ["Medium", "Worsted", "Aran"],
+        "hookMm": [5.5, 6.5],
+        "uses": "Mantas, gorros, bufandas y prendas de abrigo.",
+        "amigurumi": "Amigurumis medianos: aguja de 3.5–4 mm, más fina que la que indica la etiqueta.",
+        "strandWidth": 8
+      },
+      {
+        "id": "5-grueso",
+        "cyc": 5,
+        "name": "Grueso",
+        "aka": ["Bulky", "Chunky", "Craft"],
+        "hookMm": [6.5, 9],
+        "uses": "Mantas gruesas, alfombras y prendas rápidas.",
+        "amigurumi": "Peluches grandes: aguja de 4–5.5 mm.",
+        "strandWidth": 10.5
+      },
+      {
+        "id": "6-super-grueso",
+        "cyc": 6,
+        "name": "Súper grueso",
+        "aka": ["Super bulky", "Roving", "Chenilla"],
+        "hookMm": [9, 15],
+        "uses": "Mantas XL, cojines y decoración.",
+        "amigurumi": "Chenilla o terciopelo para peluches XL: aguja de 5–7 mm y puntos firmes.",
+        "strandWidth": 14
+      },
+      {
+        "id": "7-jumbo",
+        "cyc": 7,
+        "name": "Jumbo",
+        "aka": ["Jumbo", "Roving gigante"],
+        "hookMm": [15, null],
+        "uses": "Mantas gigantes y tejido con las manos.",
+        "amigurumi": "Poco habitual en amigurumi: reservado para piezas decorativas gigantes.",
+        "strandWidth": 18
+      }
+    ],
+    "materials": [
+      {
+        "id": "aguja-croche",
+        "name": "Aguja de croché",
+        "description": "Para empezar, una ergonómica de 4–5 mm; para amigurumi, de 2.5–3.5 mm.",
+        "icon": "hook",
+        "essential": true
+      },
+      {
+        "id": "hilo",
+        "name": "Hilo",
+        "description": "Algodón o acrílico liso de color claro: se ven mejor los puntos.",
+        "icon": "yarn",
+        "essential": true
+      },
+      {
+        "id": "tijeras",
+        "name": "Tijeras",
+        "description": "Pequeñas y afiladas, para cortes limpios.",
+        "icon": "scissors",
+        "essential": true
+      },
+      {
+        "id": "aguja-lanera",
+        "name": "Aguja lanera",
+        "description": "Aguja de punta roma y ojo grande para esconder hebras y coser piezas.",
+        "icon": "needle",
+        "essential": true
+      },
+      {
+        "id": "marcadores",
+        "name": "Marcadores de puntos",
+        "description": "Señalan el inicio de cada vuelta en espiral. Un clip o una hebra de otro color sirven.",
+        "icon": "marker",
+        "essential": false
+      },
+      {
+        "id": "relleno",
+        "name": "Relleno de fibra",
+        "description": "Fibra hueca siliconada: no se apelmaza y se lava bien.",
+        "icon": "stuffing",
+        "essential": false
+      },
+      {
+        "id": "ojos-seguridad",
+        "name": "Ojos de seguridad",
+        "description": "Con arandela de cierre. Para bebés, mejor ojos bordados.",
+        "icon": "eyes",
+        "essential": false
+      },
+      {
+        "id": "alfileres",
+        "name": "Alfileres",
+        "description": "De cabeza grande, para presentar las piezas antes de coserlas.",
+        "icon": "pins",
+        "essential": false
+      }
+    ]
+  },
+  "glossary": [
+    {
+      "id": "cadeneta",
+      "term": "Cadeneta",
+      "abbr": { "es": "cad", "us": "ch", "uk": "ch" },
+      "us": "chain",
+      "uk": "chain",
+      "aliases": ["cadena", "cadenita"],
+      "definition": "Bucle que se pasa a través del bucle anterior. Base de la mayoría de labores.",
+      "technique": "cadeneta"
+    },
+    {
+      "id": "punto-deslizado",
+      "term": "Punto deslizado",
+      "abbr": { "es": "pd", "us": "sl st", "uk": "ss" },
+      "us": "slip stitch",
+      "uk": "slip stitch",
+      "aliases": ["punto raso", "punto enano"],
+      "definition": "Se introduce la aguja, se hace lazada y se pasa por todo de una vez. No da altura.",
+      "technique": "punto-deslizado"
+    },
+    {
+      "id": "punto-bajo",
+      "term": "Punto bajo",
+      "abbr": { "es": "pb", "us": "sc", "uk": "dc" },
+      "us": "single crochet",
+      "uk": "double crochet",
+      "aliases": ["medio punto (Río de la Plata)"],
+      "definition": "Introducir, lazada, sacar un bucle (2 en la aguja), lazada y pasar por los dos.",
+      "technique": "punto-bajo"
+    },
+    {
+      "id": "medio-punto-alto",
+      "term": "Medio punto alto",
+      "abbr": { "es": "mpa", "us": "hdc", "uk": "htr" },
+      "us": "half double crochet",
+      "uk": "half treble",
+      "aliases": ["media vareta"],
+      "definition": "Lazada antes de introducir la aguja; al final, lazada y pasar por los tres bucles.",
+      "technique": "medio-punto-alto"
+    },
+    {
+      "id": "punto-alto",
+      "term": "Punto alto",
+      "abbr": { "es": "pa", "us": "dc", "uk": "tr" },
+      "us": "double crochet",
+      "uk": "treble",
+      "aliases": ["vareta"],
+      "definition": "Lazada, introducir, sacar bucle (3 en la aguja) y cerrar de dos en dos.",
+      "technique": "punto-alto"
+    },
+    {
+      "id": "anillo-magico",
+      "term": "Anillo mágico",
+      "abbr": { "es": "AM", "us": "MR", "uk": "MR" },
+      "us": "magic ring",
+      "uk": "magic ring",
+      "aliases": ["círculo mágico", "anillo de amigurumi"],
+      "definition": "Inicio en redondo con un bucle ajustable que se cierra tirando de la hebra.",
+      "technique": "anillo-magico"
+    },
+    {
+      "id": "aumento",
+      "term": "Aumento",
+      "abbr": { "es": "aum", "us": "inc", "uk": "inc" },
+      "us": "increase",
+      "uk": "increase",
+      "definition": "Dos puntos en el mismo punto de la vuelta anterior.",
+      "technique": "aumento"
+    },
+    {
+      "id": "disminucion",
+      "term": "Disminución",
+      "abbr": { "es": "dism", "us": "dec", "uk": "dec" },
+      "us": "decrease",
+      "uk": "decrease",
+      "aliases": ["menguado"],
+      "definition": "Dos puntos de la vuelta anterior se cierran juntos en uno solo.",
+      "technique": "disminucion-invisible"
+    },
+    {
+      "id": "lazada",
+      "term": "Lazada",
+      "abbr": { "es": "laz", "us": "yo", "uk": "yrh" },
+      "us": "yarn over",
+      "uk": "yarn round hook",
+      "aliases": ["hebra", "echar hilo"],
+      "definition": "Pasar el hilo sobre la aguja, de atrás hacia adelante, para engancharlo con la garganta."
+    },
+    {
+      "id": "vuelta",
+      "term": "Vuelta",
+      "abbr": { "es": "v", "us": "rnd", "uk": "rnd" },
+      "us": "round",
+      "uk": "round",
+      "aliases": ["vta"],
+      "definition": "Una pasada completa alrededor de la pieza al tejer en redondo."
+    },
+    {
+      "id": "hebra-trasera",
+      "term": "Solo hebra trasera",
+      "abbr": { "es": "ht", "us": "BLO", "uk": "BLO" },
+      "us": "back loop only",
+      "uk": "back loop only",
+      "definition": "Tejer tomando solo la hebra de atrás del punto: deja una línea marcada en el frente.",
+      "technique": "hebra-trasera"
+    }
+  ],
+  "projects": [
+    {
+      "id": "pelotita",
+      "name": "Pelotita",
+      "style": "Básico",
+      "status": "draft",
+      "difficulty": 1,
+      "level": "nivel-2",
+      "summary": "Una esfera de 4 cm: el ejercicio perfecto para dominar aumentos y disminuciones en espiral.",
+      "icon": { "shape": "pelota", "palette": ["#E39B7F", "#F6D58A"] },
+      "finishedSizeCm": 4,
+      "yarnWeight": "3-ligero",
+      "hookMm": 2.5,
+      "requirements": {
+        "materials": [
+          { "material": "aguja-croche", "detail": "2.5 mm" },
+          { "material": "hilo", "detail": "Algodón DK, 10 g" },
+          { "material": "relleno" },
+          { "material": "marcadores" },
+          { "material": "aguja-lanera" },
+          { "material": "tijeras" }
+        ],
+        "techniques": ["anillo-magico", "punto-bajo", "aumento", "disminucion-invisible", "tejer-en-espiral", "rellenar-y-cerrar"]
+      },
+      "steps": [
+        { "id": "v1", "section": "Esfera", "round": "V1", "instruction": "6 pb en un anillo mágico.", "stitchCount": 6, "technique": "anillo-magico" },
+        { "id": "v2", "section": "Esfera", "round": "V2", "instruction": "6 aum.", "stitchCount": 12, "technique": "aumento" },
+        { "id": "v3", "section": "Esfera", "round": "V3", "instruction": "(1 pb, 1 aum) × 6.", "stitchCount": 18, "technique": "aumento" },
+        { "id": "v4-v6", "section": "Esfera", "round": "V4–V6", "instruction": "18 pb en cada vuelta.", "stitchCount": 18, "technique": "punto-bajo" },
+        { "id": "v7", "section": "Esfera", "round": "V7", "instruction": "(1 pb, 1 dism) × 6. Rellena firme.", "stitchCount": 12, "technique": "disminucion-invisible" },
+        { "id": "v8", "section": "Esfera", "round": "V8", "instruction": "6 dism. Cierra el agujero y esconde la hebra.", "stitchCount": 6, "technique": "rellenar-y-cerrar" }
+      ]
+    },
+    {
+      "id": "osito",
+      "name": "Osito",
+      "style": "Clásico",
+      "status": "draft",
+      "difficulty": 3,
+      "level": "nivel-3",
+      "summary": "Cabeza, cuerpo y extremidades por separado: tu primer amigurumi con piezas unidas.",
+      "icon": { "shape": "oso", "palette": ["#C8664A", "#F4EADB", "#3A2E28"] },
+      "finishedSizeCm": 15,
+      "yarnWeight": "3-ligero",
+      "hookMm": 2.5,
+      "requirements": {
+        "materials": [
+          { "material": "aguja-croche", "detail": "2.5 mm" },
+          { "material": "hilo", "detail": "Algodón DK: marrón y crema" },
+          { "material": "relleno" },
+          { "material": "ojos-seguridad", "detail": "8 mm" },
+          { "material": "marcadores" },
+          { "material": "aguja-lanera" },
+          { "material": "alfileres" },
+          { "material": "tijeras" }
+        ],
+        "techniques": ["anillo-magico", "aumento", "disminucion-invisible", "tejer-en-espiral", "rellenar-y-cerrar", "unir-piezas", "bordar-detalles"]
+      },
+      "steps": []
+    }
+  ],
+  "svgLibrary": {
+    "shapes": {
+      "mano-indice": "M -2.75 55.32 L 51.25 13.32 A 11 11 0 0 1 64.75 30.68 L 10.75 72.68 A 11 11 0 0 1 -2.75 55.32 Z",
+      "mano-pinza-pulgar": "M 120 146 C 120 136, 136 136, 136 146 L 136 178 C 136 188, 120 188, 120 178 Z",
+      "mano-pinza-medio": "M 166 146 C 166 136, 182 136, 182 146 L 182 178 C 182 188, 166 188, 166 178 Z",
+      "mano-derecha": "M 250 100 C 266 84, 330 80, 404 90 L 404 168 C 340 176, 280 164, 258 146 C 244 134, 240 112, 250 100 Z"
+    }
+  }
+}

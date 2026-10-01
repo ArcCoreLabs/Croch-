@@ -1,0 +1,1797 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "version": {
+      "type": "number",
+      "const": 1
+    },
+    "locale": {
+      "type": "string"
+    },
+    "levels": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/__schema0"
+      }
+    },
+    "techniques": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/__schema3"
+      }
+    },
+    "tools": {
+      "type": "object",
+      "properties": {
+        "hooks": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema59"
+          }
+        },
+        "hookAnatomy": {
+          "minItems": 5,
+          "maxItems": 5,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema60"
+          }
+        },
+        "yarnWeights": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema61"
+          }
+        },
+        "materials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/definitions/__schema1"
+              },
+              "name": {
+                "$ref": "#/definitions/__schema2"
+              },
+              "description": {
+                "$ref": "#/definitions/__schema2"
+              },
+              "icon": {
+                "type": "string",
+                "enum": [
+                  "hook",
+                  "yarn",
+                  "scissors",
+                  "needle",
+                  "marker",
+                  "stuffing",
+                  "eyes",
+                  "pins"
+                ]
+              },
+              "essential": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "description",
+              "icon",
+              "essential"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "hooks",
+        "hookAnatomy",
+        "yarnWeights",
+        "materials"
+      ],
+      "additionalProperties": false
+    },
+    "glossary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/definitions/__schema1"
+          },
+          "term": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "abbr": {
+            "$ref": "#/definitions/__schema5"
+          },
+          "us": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "uk": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/__schema2"
+            }
+          },
+          "definition": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "technique": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/__schema1"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "term",
+          "abbr",
+          "us",
+          "uk",
+          "definition"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/definitions/__schema1"
+          },
+          "name": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "style": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "status": {
+            "$ref": "#/definitions/__schema62"
+          },
+          "difficulty": {
+            "$ref": "#/definitions/__schema63"
+          },
+          "level": {
+            "$ref": "#/definitions/__schema1"
+          },
+          "summary": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "icon": {
+            "$ref": "#/definitions/__schema64"
+          },
+          "finishedSizeCm": {
+            "$ref": "#/definitions/__schema66"
+          },
+          "yarnWeight": {
+            "$ref": "#/definitions/__schema1"
+          },
+          "hookMm": {
+            "$ref": "#/definitions/__schema67"
+          },
+          "requirements": {
+            "$ref": "#/definitions/__schema68"
+          },
+          "stage": {
+            "$ref": "#/definitions/__schema69"
+          },
+          "geometry": {
+            "$ref": "#/definitions/__schema70"
+          },
+          "steps": {
+            "$ref": "#/definitions/__schema71"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "style",
+          "status",
+          "difficulty",
+          "level",
+          "summary",
+          "icon",
+          "finishedSizeCm",
+          "yarnWeight",
+          "hookMm",
+          "requirements",
+          "steps"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "svgLibrary": {
+      "type": "object",
+      "properties": {
+        "shapes": {
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "$ref": "#/definitions/__schema33"
+          }
+        }
+      },
+      "required": [
+        "shapes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "version",
+    "locale",
+    "levels",
+    "techniques",
+    "tools",
+    "glossary",
+    "projects",
+    "svgLibrary"
+  ],
+  "additionalProperties": false,
+  "definitions": {
+    "__schema0": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/__schema1"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "title": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "subtitle": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "description": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "range": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "techniques": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema1"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "order",
+        "title",
+        "subtitle",
+        "description",
+        "range",
+        "techniques"
+      ],
+      "additionalProperties": false
+    },
+    "__schema1": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "__schema2": {
+      "type": "string",
+      "minLength": 1
+    },
+    "__schema3": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/__schema1"
+        },
+        "name": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "abbr": {
+          "$ref": "#/definitions/__schema4"
+        },
+        "level": {
+          "$ref": "#/definitions/__schema1"
+        },
+        "status": {
+          "$ref": "#/definitions/__schema6"
+        },
+        "summary": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "difficulty": {
+          "$ref": "#/definitions/__schema7"
+        },
+        "estimatedMinutes": {
+          "$ref": "#/definitions/__schema8"
+        },
+        "prerequisites": {
+          "$ref": "#/definitions/__schema9"
+        },
+        "materials": {
+          "$ref": "#/definitions/__schema10"
+        },
+        "tips": {
+          "$ref": "#/definitions/__schema11"
+        },
+        "commonMistakes": {
+          "$ref": "#/definitions/__schema12"
+        },
+        "stage": {
+          "$ref": "#/definitions/__schema13"
+        },
+        "geometry": {
+          "$ref": "#/definitions/__schema32"
+        },
+        "steps": {
+          "$ref": "#/definitions/__schema34"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "level",
+        "status",
+        "summary",
+        "difficulty",
+        "estimatedMinutes",
+        "prerequisites",
+        "steps"
+      ],
+      "additionalProperties": false
+    },
+    "__schema4": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema5"
+        }
+      ]
+    },
+    "__schema5": {
+      "type": "object",
+      "properties": {
+        "es": {
+          "type": "string"
+        },
+        "us": {
+          "type": "string"
+        },
+        "uk": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "es"
+      ],
+      "additionalProperties": false
+    },
+    "__schema6": {
+      "type": "string",
+      "enum": [
+        "published",
+        "draft"
+      ]
+    },
+    "__schema7": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "__schema8": {
+      "type": "integer",
+      "exclusiveMinimum": 0,
+      "maximum": 9007199254740991
+    },
+    "__schema9": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/__schema1"
+      }
+    },
+    "__schema10": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/__schema1"
+      }
+    },
+    "__schema11": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/__schema2"
+      }
+    },
+    "__schema12": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/__schema2"
+      }
+    },
+    "__schema13": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema14"
+        }
+      ]
+    },
+    "__schema14": {
+      "type": "object",
+      "properties": {
+        "viewBox": {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema15"
+            },
+            {
+              "$ref": "#/definitions/__schema16"
+            },
+            {
+              "$ref": "#/definitions/__schema17"
+            },
+            {
+              "$ref": "#/definitions/__schema18"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 4,
+          "maxItems": 4,
+          "description": "[minX, minY, ancho, alto] del escenario."
+        },
+        "hook": {
+          "description": "Configuración de aguja común a todos los pasos.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema19"
+            }
+          ]
+        }
+      },
+      "required": [
+        "viewBox"
+      ],
+      "additionalProperties": false
+    },
+    "__schema15": {
+      "type": "number"
+    },
+    "__schema16": {
+      "type": "number"
+    },
+    "__schema17": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "__schema18": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "__schema19": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "description": "Tipo de aguja (id de tools.hooks).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema1"
+            }
+          ]
+        },
+        "tip": {
+          "description": "Posición [x, y] del ápice de la punta en reposo.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema20"
+            }
+          ]
+        },
+        "radius": {
+          "description": "Radio del cuerpo en unidades del viewBox.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema23"
+            }
+          ]
+        },
+        "pivot": {
+          "description": "Centro de rotación [x, y]. Por defecto, la garganta.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema20"
+            }
+          ]
+        },
+        "translate": {
+          "description": "Desplazamiento [x, y] de la aguja, fijo o animado.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema24"
+            }
+          ]
+        },
+        "rotate": {
+          "description": "Rotación en grados alrededor del pivote.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema28"
+            }
+          ]
+        },
+        "opacity": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "minItems": 1,
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/__schema31"
+              }
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "__schema20": {
+      "type": "array",
+      "items": [
+        {
+          "$ref": "#/definitions/__schema21"
+        },
+        {
+          "$ref": "#/definitions/__schema22"
+        }
+      ],
+      "additionalItems": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "__schema21": {
+      "type": "number"
+    },
+    "__schema22": {
+      "type": "number"
+    },
+    "__schema23": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "__schema24": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema20"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema25"
+          }
+        }
+      ]
+    },
+    "__schema25": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema20"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema20"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema26": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "__schema27": {
+      "type": "string",
+      "enum": [
+        "linear",
+        "easeIn",
+        "easeOut",
+        "easeInOut",
+        "backOut",
+        "anticipate",
+        "circOut"
+      ]
+    },
+    "__schema28": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema29"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema30"
+          }
+        }
+      ]
+    },
+    "__schema29": {
+      "type": "number"
+    },
+    "__schema30": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema29"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema29"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema31": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema32": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/__schema33"
+      }
+    },
+    "__schema33": {
+      "type": "string",
+      "minLength": 1
+    },
+    "__schema34": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/definitions/__schema1"
+          },
+          "phase": {
+            "type": "string",
+            "enum": [
+              "hold",
+              "insert",
+              "yarn-over",
+              "pull-through"
+            ],
+            "description": "Micro-movimiento: hold (posición) · insert · yarn-over (lazada) · pull-through."
+          },
+          "title": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "instruction": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "tip": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/__schema2"
+              }
+            ]
+          },
+          "durationMs": {
+            "description": "Duración a velocidad 1×. Por defecto 4200.",
+            "allOf": [
+              {
+                "$ref": "#/definitions/__schema35"
+              }
+            ]
+          },
+          "scene": {
+            "$ref": "#/definitions/__schema36"
+          }
+        },
+        "required": [
+          "id",
+          "phase",
+          "title",
+          "instruction",
+          "scene"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "__schema35": {
+      "type": "integer",
+      "minimum": 800,
+      "maximum": 20000
+    },
+    "__schema36": {
+      "type": "object",
+      "properties": {
+        "hook": {
+          "description": "Animación de la aguja en este paso (hereda stage.hook). false = sin aguja.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema37"
+            }
+          ]
+        },
+        "layers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema38"
+          },
+          "description": "Capas en orden de dibujo: primero las de atrás."
+        },
+        "callouts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "#/definitions/__schema1"
+              },
+              "text": {
+                "description": "Texto breve de la etiqueta (HTML nítido sobre la escena).",
+                "allOf": [
+                  {
+                    "$ref": "#/definitions/__schema2"
+                  }
+                ]
+              },
+              "at": {
+                "description": "Punto de anclaje [x, y] en coordenadas del viewBox.",
+                "allOf": [
+                  {
+                    "$ref": "#/definitions/__schema20"
+                  }
+                ]
+              },
+              "placement": {
+                "description": "Lado del ancla donde aparece. Por defecto: top.",
+                "allOf": [
+                  {
+                    "$ref": "#/definitions/__schema56"
+                  }
+                ]
+              },
+              "align": {
+                "description": "Alineación horizontal respecto al ancla (top/bottom).",
+                "allOf": [
+                  {
+                    "$ref": "#/definitions/__schema57"
+                  }
+                ]
+              },
+              "tone": {
+                "type": "string",
+                "enum": [
+                  "info",
+                  "success",
+                  "warning"
+                ]
+              },
+              "show": {
+                "type": "object",
+                "properties": {
+                  "from": {
+                    "$ref": "#/definitions/__schema26"
+                  },
+                  "to": {
+                    "$ref": "#/definitions/__schema58"
+                  }
+                },
+                "required": [
+                  "from"
+                ],
+                "additionalProperties": false,
+                "description": "Ventana visible dentro del paso (0–1). Sin `to`, queda visible hasta el final."
+              }
+            },
+            "required": [
+              "id",
+              "text",
+              "at",
+              "show"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "layers"
+      ],
+      "additionalProperties": false
+    },
+    "__schema37": {
+      "anyOf": [
+        {
+          "type": "boolean",
+          "const": false
+        },
+        {
+          "$ref": "#/definitions/__schema19"
+        }
+      ]
+    },
+    "__schema38": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Identificador único de la capa dentro del paso.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema1"
+            }
+          ]
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "yarn",
+            "guide",
+            "hand",
+            "focus"
+          ],
+          "description": "yarn = hilo · guide = flecha/guía · hand = silueta de dedo · focus = anillo de atención."
+        },
+        "depth": {
+          "description": "Delante o detrás de la aguja. Por defecto: front.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema39"
+            }
+          ]
+        },
+        "translucent": {
+          "description": "Tramo físicamente oculto: se dibuja con transparencia.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema40"
+            }
+          ]
+        },
+        "attach": {
+          "description": "La capa viaja pegada a la aguja (p. ej. la hebra en la garganta).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema41"
+            }
+          ]
+        },
+        "d": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/__schema33"
+            },
+            {
+              "$ref": "#/definitions/__schema42"
+            }
+          ],
+          "description": "Trazado SVG fijo, referencia \"@nombre\" o morphing [[momento, trazado], …] (mismos comandos en todos)."
+        },
+        "draw": {
+          "description": "Fracción visible del trazado (0–1). Atajo: { \"from\": 0.1, \"to\": 0.4 } lo dibuja de 0 a 1.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema44"
+            }
+          ]
+        },
+        "trim": {
+          "description": "Recorta desde el inicio del trazado (0–1): la hebra que se va.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema46"
+            }
+          ]
+        },
+        "opacity": {
+          "description": "Opacidad 0–1, fija o animada.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema48"
+            }
+          ]
+        },
+        "translate": {
+          "description": "Desplazamiento [x, y] en unidades del viewBox.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema50"
+            }
+          ]
+        },
+        "active": {
+          "description": "Solo hilo: 0 = hilo base (azul), 1 = hilo activo (amarillo).",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema52"
+            }
+          ]
+        },
+        "marker": {
+          "description": "Punta que viaja con el extremo del trazo mientras se dibuja.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema54"
+            }
+          ]
+        },
+        "label": {
+          "description": "Descripción breve para depuración.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema55"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "d"
+      ],
+      "additionalProperties": false
+    },
+    "__schema39": {
+      "type": "string",
+      "enum": [
+        "back",
+        "front"
+      ]
+    },
+    "__schema40": {
+      "type": "boolean"
+    },
+    "__schema41": {
+      "type": "string",
+      "const": "hook"
+    },
+    "__schema42": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/__schema43"
+      }
+    },
+    "__schema43": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema33"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema33"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema44": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema26"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema45"
+          }
+        },
+        {
+          "type": "object",
+          "properties": {
+            "from": {
+              "$ref": "#/definitions/__schema26"
+            },
+            "to": {
+              "$ref": "#/definitions/__schema26"
+            },
+            "ease": {
+              "allOf": [
+                {
+                  "$ref": "#/definitions/__schema27"
+                }
+              ]
+            }
+          },
+          "required": [
+            "from",
+            "to"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "__schema45": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema46": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema26"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema47"
+          }
+        }
+      ]
+    },
+    "__schema47": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema48": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema26"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema49"
+          }
+        }
+      ]
+    },
+    "__schema49": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema50": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema20"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema51"
+          }
+        }
+      ]
+    },
+    "__schema51": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema20"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema20"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema52": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema26"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema53"
+          }
+        }
+      ]
+    },
+    "__schema53": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema54": {
+      "type": "string",
+      "enum": [
+        "arrow",
+        "dot"
+      ]
+    },
+    "__schema55": {
+      "type": "string"
+    },
+    "__schema56": {
+      "type": "string",
+      "enum": [
+        "top",
+        "bottom",
+        "left",
+        "right"
+      ]
+    },
+    "__schema57": {
+      "type": "string",
+      "enum": [
+        "start",
+        "center",
+        "end"
+      ]
+    },
+    "__schema58": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema26"
+        }
+      ]
+    },
+    "__schema59": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/__schema1"
+        },
+        "name": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "aka": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema2"
+          }
+        },
+        "material": {
+          "type": "string",
+          "enum": [
+            "aluminio",
+            "acero",
+            "bambu"
+          ]
+        },
+        "description": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "bestFor": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "sizesMm": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "profile": {
+          "type": "object",
+          "properties": {
+            "headRadius": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "neckRadius": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "tipLength": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "lipLength": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "throatDepth": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "throatLength": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "shaftLength": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "grip": {
+              "type": "object",
+              "properties": {
+                "length": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "halfWidth": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "required": [
+                "length",
+                "halfWidth"
+              ],
+              "additionalProperties": false
+            },
+            "handle": {
+              "type": "object",
+              "properties": {
+                "style": {
+                  "type": "string",
+                  "enum": [
+                    "rod",
+                    "sleeve"
+                  ]
+                },
+                "length": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "radius": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "required": [
+                "style",
+                "length",
+                "radius"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "headRadius",
+            "neckRadius",
+            "tipLength",
+            "lipLength",
+            "throatDepth",
+            "throatLength",
+            "shaftLength",
+            "grip",
+            "handle"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "aka",
+        "material",
+        "description",
+        "bestFor",
+        "sizesMm",
+        "profile"
+      ],
+      "additionalProperties": false
+    },
+    "__schema60": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "enum": [
+            "punta",
+            "garganta",
+            "cuerpo",
+            "apoyo",
+            "mango"
+          ]
+        },
+        "name": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "role": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "description": {
+          "$ref": "#/definitions/__schema2"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "role",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "__schema61": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/__schema1"
+        },
+        "cyc": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 7
+        },
+        "name": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "aka": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema2"
+          }
+        },
+        "hookMm": {
+          "type": "array",
+          "items": [
+            {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            {
+              "anyOf": [
+                {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "uses": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "amigurumi": {
+          "$ref": "#/definitions/__schema2"
+        },
+        "strandWidth": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "id",
+        "cyc",
+        "name",
+        "aka",
+        "hookMm",
+        "uses",
+        "amigurumi",
+        "strandWidth"
+      ],
+      "additionalProperties": false
+    },
+    "__schema62": {
+      "type": "string",
+      "enum": [
+        "published",
+        "draft"
+      ]
+    },
+    "__schema63": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5
+    },
+    "__schema64": {
+      "type": "object",
+      "properties": {
+        "shape": {
+          "$ref": "#/definitions/__schema1"
+        },
+        "palette": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema65"
+          }
+        }
+      },
+      "required": [
+        "shape",
+        "palette"
+      ],
+      "additionalProperties": false
+    },
+    "__schema65": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$"
+    },
+    "__schema66": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "__schema67": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "__schema68": {
+      "type": "object",
+      "properties": {
+        "materials": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "material": {
+                "$ref": "#/definitions/__schema1"
+              },
+              "detail": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "material"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "techniques": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema1"
+          }
+        }
+      },
+      "required": [
+        "materials",
+        "techniques"
+      ],
+      "additionalProperties": false
+    },
+    "__schema69": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema14"
+        }
+      ]
+    },
+    "__schema70": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/__schema33"
+      }
+    },
+    "__schema71": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "#/definitions/__schema1"
+          },
+          "section": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "round": {
+            "type": "string"
+          },
+          "instruction": {
+            "$ref": "#/definitions/__schema2"
+          },
+          "stitchCount": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "technique": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/__schema1"
+              }
+            ]
+          },
+          "durationMs": {
+            "type": "integer",
+            "minimum": 800,
+            "maximum": 20000
+          },
+          "scene": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/__schema36"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "section",
+          "instruction"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "title": "croché!! · contenido",
+  "description": "Contenido de la app: niveles, técnicas, herramientas, glosario, proyectos y escenas SVG del reproductor."
+}

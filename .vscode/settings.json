@@ -1,0 +1,9 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["src/data/crochet-data.json"],
+      "url": "./src/data/crochet-data.schema.json"
+    }
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
+}

@@ -1,0 +1,197 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------------------------- */
+/* Paleta "taller": crema, terracota, salvia, miel y lavanda.                  */
+/* -------------------------------------------------------------------------- */
+@theme {
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+
+  --color-cream-50: #fffbf5;
+  --color-cream-100: #fbf5ec;
+  --color-cream-200: #f4eadb;
+  --color-cream-300: #eadbc4;
+
+  --color-terracotta-100: #f8e1d7;
+  --color-terracotta-200: #f1c3ae;
+  --color-terracotta-300: #e9a98f;
+  --color-terracotta-400: #db8466;
+  --color-terracotta-500: #c8664a;
+  --color-terracotta-600: #a9503a;
+  --color-terracotta-700: #84402f;
+
+  --color-sage-100: #e8f0e6;
+  --color-sage-200: #d2e2ce;
+  --color-sage-300: #b3cdae;
+  --color-sage-400: #8fb08a;
+  --color-sage-500: #6e9269;
+  --color-sage-600: #557452;
+  --color-sage-700: #405740;
+  --color-sage-800: #2f422f;
+  --color-sage-900: #223022;
+
+  --color-honey-100: #fcf0d4;
+  --color-honey-200: #f8e2a8;
+  --color-honey-300: #f6d58a;
+  --color-honey-400: #efc062;
+  --color-honey-500: #e2a63b;
+  --color-honey-600: #b98222;
+
+  --color-lavender-100: #ece8f6;
+  --color-lavender-200: #d8d0ee;
+  --color-lavender-300: #bcaee0;
+  --color-lavender-500: #8a78c2;
+  --color-lavender-700: #5b4b8f;
+
+  --color-cocoa-600: #5b4a41;
+  --color-cocoa-700: #4a3b34;
+  --color-cocoa-800: #362b26;
+  --color-cocoa-900: #261e1b;
+
+  --shadow-soft: 0 1px 2px rgb(58 46 40 / 0.05), 0 12px 32px -14px rgb(58 46 40 / 0.28);
+  --ease-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Tokens semánticos que cambian con el tema del sistema. */
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+}
+
+:root {
+  --canvas: #fbf5ec;
+  --surface: #fffbf5;
+  --surface-muted: #f4eadb;
+  --ink: #3a2e28;
+  --ink-soft: #6c5d53;
+  --line: #eadbc4;
+  --paper-dot: rgb(200 102 74 / 0.07);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #1d1714;
+    --surface: #282019;
+    --surface-muted: #352a24;
+    --ink: #f6ede0;
+    --ink-soft: #cbbcad;
+    --line: #463830;
+    --paper-dot: rgb(255 238 220 / 0.04);
+    color-scheme: dark;
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--canvas);
+    /* Textura de papel generada con CSS (sin imágenes). */
+    background-image: radial-gradient(circle at 1px 1px, var(--paper-dot) 1px, transparent 0);
+    background-size: 22px 22px;
+    color: var(--ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-terracotta-400);
+    outline-offset: 3px;
+    border-radius: 12px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Slider del reproductor                                                      */
+/* -------------------------------------------------------------------------- */
+@layer components {
+  .scrubber {
+    --track: var(--surface-muted);
+    --fill-color: var(--color-terracotta-500);
+    appearance: none;
+    height: 28px;
+    background: transparent;
+    cursor: pointer;
+    touch-action: pan-y;
+  }
+
+  .scrubber::-webkit-slider-runnable-track {
+    height: 8px;
+    border-radius: 999px;
+    background: linear-gradient(to right, var(--fill-color) var(--fill), var(--track) var(--fill));
+  }
+
+  .scrubber::-moz-range-track {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--track);
+  }
+
+  .scrubber::-moz-range-progress {
+    height: 8px;
+    border-radius: 999px;
+    background: var(--fill-color);
+  }
+
+  .scrubber::-webkit-slider-thumb {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    margin-top: -7px;
+    border-radius: 999px;
+    background: var(--color-cream-50);
+    border: 5px solid var(--fill-color);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.25);
+    transition: transform 150ms var(--ease-soft);
+  }
+
+  .scrubber::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: var(--color-cream-50);
+    border: 5px solid var(--fill-color);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.25);
+  }
+
+  .scrubber:active::-webkit-slider-thumb {
+    transform: scale(1.15);
+  }
+
+  .scrubber:focus-visible {
+    outline-offset: 2px;
+  }
+
+  /* Pulso suave para los anillos de atención del escenario. */
+  .stage-pulse {
+    animation: stage-pulse 1.6s var(--ease-soft) infinite;
+  }
+
+  @keyframes stage-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.55;
+    }
+  }
+}
