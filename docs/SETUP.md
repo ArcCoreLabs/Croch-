@@ -65,4 +65,16 @@ Después copia `src/`, `tests/`, `scripts/`, `next.config.ts`, `vitest.config.mt
 
 ## Despliegue
 
+### GitHub Pages (automático)
+
+El workflow `.github/workflows/deploy-pages.yml` publica la app en cada push: ejecuta `npm run check`, construye con `NEXT_BASE_PATH=/<repo>` y despliega `out/`.
+
+1. En GitHub: **Settings → Pages → Build and deployment → Source: GitHub Actions** (solo la primera vez).
+2. Haz push o lánzalo a mano en **Actions → Publicar en GitHub Pages → Run workflow**.
+3. La web queda en `https://<usuario>.github.io/<repo>/`.
+
+Para probar localmente con la misma subruta: `NEXT_BASE_PATH=/Croch- npm run build`.
+
+### Otros hostings
+
 `npm run build` genera `out/`: HTML, CSS y JS estáticos. Se puede publicar en GitHub Pages, Netlify, Vercel, Cloudflare Pages o cualquier servidor de archivos. No hace falta Node en producción.
