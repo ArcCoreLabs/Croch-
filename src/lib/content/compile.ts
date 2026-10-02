@@ -1,6 +1,8 @@
 import { buildHookGeometry } from "@/lib/svg/hook-geometry";
+import { strandPath } from "@/lib/svg/strand";
 import type {
   CompiledCallout,
+  CompiledGradient,
   CompiledHook,
   CompiledLayer,
   CompiledScene,
@@ -9,6 +11,7 @@ import type {
   Track,
 } from "@/lib/player/types";
 import type { CalloutInput, CrochetData, HookActorInput, LayerInput, SceneInput, TechniqueInput } from "./schema";
+import { resolveStrandFrames, type Point, type PointSets } from "./strands";
 import { resolvePathRef } from "./validate";
 
 /**
@@ -103,9 +106,25 @@ const isStatic = (track: Track<number>) => track.values.every((v) => v === track
 interface SceneContext {
   data: CrochetData;
   geometry: Record<string, string> | undefined;
+  pointSets: PointSets;
   viewBox: [number, number, number, number];
   stageHook: HookActorInput | undefined;
   where: string;
+}
+
+/** Puntos de cada hilo de la escena como pista (mismos momentos y easings que el autor definió). */
+type StrandTracks = Map<string, Track<readonly Point[]>>;
+
+function compileStrands(scene: SceneInput, ctx: SceneContext): StrandTracks {
+  const tracks: StrandTracks = new Map();
+  Object.entries(scene.strands ?? {}).forEach(([id, strand]) => {
+    const frames = resolveStrandFrames(strand, ctx.pointSets).map((frame): Frame<readonly Point[]> => {
+      if (frame.points === null) throw new ContentCompileError(`${ctx.where}.strands.${id}: pointSet no encontrado "${frame.ref}".`);
+      return frame.ease ? [frame.at, frame.points, frame.ease] : [frame.at, frame.points];
+    });
+    tracks.set(id, framesToTrack(frames));
+  });
+  return tracks;
 }
 
 function resolvePath(value: string, ctx: SceneContext): string {
@@ -114,15 +133,45 @@ function resolvePath(value: string, ctx: SceneContext): string {
   return resolved;
 }
 
-function compileLayer(layer: LayerInput, ctx: SceneContext): CompiledLayer {
-  const d: Track<string> =
-    typeof layer.d === "string"
-      ? constantTrack(resolvePath(layer.d, ctx))
-      : framesToTrack(
-          layer.d.map((f): Frame<string> =>
-            f.length === 3 ? [f[0], resolvePath(f[1], ctx), f[2]] : [f[0], resolvePath(f[1], ctx)],
-          ),
-        );
+function layerPath(layer: LayerInput, ctx: SceneContext, strands: StrandTracks): Track<string> {
+  if (layer.strand !== undefined) {
+    const strand = strands.get(layer.strand);
+    if (!strand || !layer.range) throw new ContentCompileError(`${ctx.where}: hilo inexistente "${layer.strand}".`);
+    const [from, to] = layer.range;
+    // Cada fotograma del hilo se convierte en el trazado de este tramo.
+    return { at: strand.at, values: strand.values.map((points) => strandPath(points, from, to)), ease: strand.ease };
+  }
+  if (layer.d === undefined) throw new ContentCompileError(`${ctx.where}: la capa no tiene geometría.`);
+  if (typeof layer.d === "string") return constantTrack(resolvePath(layer.d, ctx));
+  return framesToTrack(
+    layer.d.map((f): Frame<string> =>
+      f.length === 3 ? [f[0], resolvePath(f[1], ctx), f[2]] : [f[0], resolvePath(f[1], ctx)],
+    ),
+  );
+}
+
+/** Extremos del tramo a lo largo del tiempo: orientan el degradado de tono. */
+function layerGradient(layer: LayerInput, strands: StrandTracks): CompiledGradient | null {
+  if (layer.activeFrom === undefined || layer.strand === undefined || !layer.range) return null;
+  const strand = strands.get(layer.strand);
+  if (!strand) return null;
+  const [from, to] = layer.range;
+  const coordinate = (index: number, axis: 0 | 1): Track<number> => ({
+    at: strand.at,
+    values: strand.values.map((points) => points[index][axis]),
+    ease: strand.ease,
+  });
+  return {
+    from: numberTrack(layer.activeFrom, 0),
+    x1: coordinate(from, 0),
+    y1: coordinate(from, 1),
+    x2: coordinate(to, 0),
+    y2: coordinate(to, 1),
+  };
+}
+
+function compileLayer(layer: LayerInput, ctx: SceneContext, strands: StrandTracks): CompiledLayer {
+  const d = layerPath(layer, ctx, strands);
   const draw = drawTrack(layer.draw);
   const trim = numberTrack(layer.trim, 0);
   const translate = pointTracks(layer.translate);
@@ -142,6 +191,7 @@ function compileLayer(layer: LayerInput, ctx: SceneContext): CompiledLayer {
     translateX: translate.x,
     translateY: translate.y,
     active: numberTrack(layer.active, 0),
+    gradient: layerGradient(layer, strands),
     animatesStroke: !isStatic(draw) || !isStatic(trim) || draw.values[0] !== 1 || trim.values[0] !== 0,
   };
 }
@@ -199,7 +249,10 @@ function compileCallout(callout: CalloutInput): CompiledCallout {
 }
 
 export function compileScene(scene: SceneInput, ctx: SceneContext): CompiledScene {
-  const layers = scene.layers.map((layer) => compileLayer(layer, { ...ctx, where: `${ctx.where}.${layer.id}` }));
+  const strands = compileStrands(scene, ctx);
+  const layers = scene.layers.map((layer) =>
+    compileLayer(layer, { ...ctx, where: `${ctx.where}.${layer.id}` }, strands),
+  );
   return {
     viewBox: ctx.viewBox,
     hook: compileHook(scene.hook, ctx),
@@ -224,6 +277,7 @@ export function compileTechniqueSteps(technique: TechniqueInput, data: CrochetDa
     scene: compileScene(step.scene, {
       data,
       geometry: technique.geometry,
+      pointSets: technique.pointSets,
       viewBox,
       stageHook: technique.stage?.hook,
       where: `techniques.${technique.id}.steps.${step.id}`,

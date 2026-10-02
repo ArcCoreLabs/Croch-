@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { cancelFrame, frame, motion, useTransform, type MotionValue } from "framer-motion";
 import type { CompiledLayer } from "@/lib/player/types";
 import { AttachedToHook, TransformGroup } from "./HookActor";
@@ -32,51 +32,21 @@ export function SceneLayer({ layer, progress, ids }: SceneLayerProps) {
   });
   const translate = useTransform([x, y], ([tx, ty]: number[]) => (tx !== 0 || ty !== 0 ? `translate(${tx} ${ty})` : ""));
 
-  // Azul y amarillo mezclados en RGB dan un gris apagado: el cambio de tono pasa
-  // por un blanco cálido, que se lee como un destello de "puntada terminada".
-  const { base, active: activeTone, glow } = STAGE_COLORS.yarn;
-  const core = useTransform(active, [0, 0.5, 1], [base.core, glow.core, activeTone.core]);
-  const outline = useTransform(active, [0, 0.5, 1], [base.outline, glow.outline, activeTone.outline]);
-  const sheen = useTransform(active, [0, 0.5, 1], [base.sheen, glow.sheen, activeTone.sheen]);
-
   const pathRef = useRef<SVGPathElement>(null);
-  const strokeStyle = layer.animatesStroke ? { pathLength: visibleLength, pathOffset: trim } : {};
+  const strokeStyle: YarnPaths["strokeStyle"] = layer.animatesStroke ? { pathLength: visibleLength, pathOffset: trim } : {};
 
   let content: React.ReactNode;
   switch (layer.role) {
     case "yarn":
       content = (
-        <>
-          {/* Contorno con extremos planos: así los tramos que se empalman (la hebra que
-              pasa de detrás a delante de la aguja) no dejan una "costura" oscura. */}
-          <motion.path
-            d={d}
-            fill="none"
-            strokeWidth={YARN_WIDTH + YARN_OUTLINE}
-            strokeLinecap="butt"
-            strokeLinejoin="round"
-            style={{ ...strokeStyle, stroke: outline }}
-          />
-          <motion.path
-            ref={pathRef}
-            d={d}
-            fill="none"
-            strokeWidth={YARN_WIDTH}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{ ...strokeStyle, stroke: core }}
-          />
-          <g transform="translate(-0.8 -1)">
-            <motion.path
-              d={d}
-              fill="none"
-              strokeWidth={1.3}
-              strokeLinecap="round"
-              strokeOpacity={0.55}
-              style={{ ...strokeStyle, stroke: sheen }}
-            />
-          </g>
-        </>
+        <YarnStroke
+          d={d}
+          strokeStyle={strokeStyle}
+          active={active}
+          gradient={layer.gradient}
+          progress={progress}
+          pathRef={pathRef}
+        />
       );
       break;
     case "guide":
@@ -197,5 +167,124 @@ function DrawHead({ kind, pathRef, draw, d, color }: DrawHeadProps) {
         <circle r={4.5} fill={color} />
       )}
     </g>
+  );
+}
+
+/**
+ * Colores del hilo según el tono (0 = base azul, 1 = activo amarillo).
+ * Azul y amarillo mezclados en RGB dan un gris apagado: el cambio de tono pasa
+ * por un blanco cálido, que se lee como un destello de "puntada terminada".
+ */
+function useYarnColors(tone: MotionValue<number>) {
+  const { base, active, glow } = STAGE_COLORS.yarn;
+  return {
+    core: useTransform<number, string>(tone, [0, 0.5, 1], [base.core, glow.core, active.core]),
+    outline: useTransform<number, string>(tone, [0, 0.5, 1], [base.outline, glow.outline, active.outline]),
+    sheen: useTransform<number, string>(tone, [0, 0.5, 1], [base.sheen, glow.sheen, active.sheen]),
+  };
+}
+
+type StrokePaint = MotionValue<string> | string;
+
+interface YarnPaths {
+  d: MotionValue<string>;
+  strokeStyle: { pathLength?: MotionValue<number>; pathOffset?: MotionValue<number> };
+  pathRef: React.RefObject<SVGPathElement | null>;
+}
+
+/** Hilo = contorno + núcleo + brillo, con la pintura que se le indique. */
+function YarnPaths({ d, strokeStyle, pathRef, outline, core, sheen }: YarnPaths & { outline: StrokePaint; core: StrokePaint; sheen: StrokePaint }) {
+  return (
+    <>
+      {/* Contorno con extremos planos: así los tramos que se empalman (la hebra que
+          pasa de detrás a delante de la aguja) no dejan una "costura" oscura. */}
+      <motion.path
+        d={d}
+        fill="none"
+        strokeWidth={YARN_WIDTH + YARN_OUTLINE}
+        strokeLinecap="butt"
+        strokeLinejoin="round"
+        style={{ ...strokeStyle, stroke: outline }}
+      />
+      <motion.path
+        ref={pathRef}
+        d={d}
+        fill="none"
+        strokeWidth={YARN_WIDTH}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ ...strokeStyle, stroke: core }}
+      />
+      <g transform="translate(-0.8 -1)">
+        <motion.path
+          d={d}
+          fill="none"
+          strokeWidth={1.3}
+          strokeLinecap="round"
+          strokeOpacity={0.55}
+          style={{ ...strokeStyle, stroke: sheen }}
+        />
+      </g>
+    </>
+  );
+}
+
+interface YarnStrokeProps extends YarnPaths {
+  active: MotionValue<number>;
+  gradient: CompiledLayer["gradient"];
+  progress: MotionValue<number>;
+}
+
+function YarnStroke({ gradient, ...props }: YarnStrokeProps) {
+  return gradient ? <GradientYarn gradient={gradient} {...props} /> : <SolidYarn {...props} />;
+}
+
+function SolidYarn({ active, d, strokeStyle, pathRef }: Omit<YarnStrokeProps, "gradient" | "progress">) {
+  const colors = useYarnColors(active);
+  return <YarnPaths d={d} strokeStyle={strokeStyle} pathRef={pathRef} {...colors} />;
+}
+
+/**
+ * Tramo con degradado de tono (p. ej. el "cuello" donde la hebra de trabajo sale
+ * de la labor): el color cambia suave a lo largo del hilo, sin un borde que
+ * parezca un corte. El degradado sigue a los extremos del tramo mientras se mueve.
+ */
+function GradientYarn({
+  gradient,
+  active,
+  progress,
+  d,
+  strokeStyle,
+  pathRef,
+}: Omit<YarnStrokeProps, "gradient"> & { gradient: NonNullable<CompiledLayer["gradient"]> }) {
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const startTone = useTrack(progress, gradient.from);
+  const x1 = useTrack(progress, gradient.x1);
+  const y1 = useTrack(progress, gradient.y1);
+  const x2 = useTrack(progress, gradient.x2);
+  const y2 = useTrack(progress, gradient.y2);
+  const start = useYarnColors(startTone);
+  const end = useYarnColors(active);
+
+  const parts = ["outline", "core", "sheen"] as const;
+  return (
+    <>
+      <defs>
+        {parts.map((part) => (
+          <motion.linearGradient key={part} id={`${uid}-${part}`} gradientUnits="userSpaceOnUse" x1={x1} y1={y1} x2={x2} y2={y2}>
+            <motion.stop offset="0" stopColor={start[part]} />
+            <motion.stop offset="1" stopColor={end[part]} />
+          </motion.linearGradient>
+        ))}
+      </defs>
+      <YarnPaths
+        d={d}
+        strokeStyle={strokeStyle}
+        pathRef={pathRef}
+        outline={`url(#${uid}-outline)`}
+        core={`url(#${uid}-core)`}
+        sheen={`url(#${uid}-sheen)`}
+      />
+    </>
   );
 }

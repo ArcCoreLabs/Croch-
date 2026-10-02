@@ -33,7 +33,7 @@
           "minItems": 1,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema59"
+            "$ref": "#/definitions/__schema84"
           }
         },
         "hookAnatomy": {
@@ -41,14 +41,14 @@
           "maxItems": 5,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema60"
+            "$ref": "#/definitions/__schema85"
           }
         },
         "yarnWeights": {
           "minItems": 1,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema61"
+            "$ref": "#/definitions/__schema86"
           }
         },
         "materials": {
@@ -164,10 +164,10 @@
             "$ref": "#/definitions/__schema2"
           },
           "status": {
-            "$ref": "#/definitions/__schema62"
+            "$ref": "#/definitions/__schema87"
           },
           "difficulty": {
-            "$ref": "#/definitions/__schema63"
+            "$ref": "#/definitions/__schema88"
           },
           "level": {
             "$ref": "#/definitions/__schema1"
@@ -176,28 +176,31 @@
             "$ref": "#/definitions/__schema2"
           },
           "icon": {
-            "$ref": "#/definitions/__schema64"
+            "$ref": "#/definitions/__schema89"
           },
           "finishedSizeCm": {
-            "$ref": "#/definitions/__schema66"
+            "$ref": "#/definitions/__schema91"
           },
           "yarnWeight": {
             "$ref": "#/definitions/__schema1"
           },
           "hookMm": {
-            "$ref": "#/definitions/__schema67"
+            "$ref": "#/definitions/__schema92"
           },
           "requirements": {
-            "$ref": "#/definitions/__schema68"
+            "$ref": "#/definitions/__schema93"
           },
           "stage": {
-            "$ref": "#/definitions/__schema69"
+            "$ref": "#/definitions/__schema94"
           },
           "geometry": {
-            "$ref": "#/definitions/__schema70"
+            "$ref": "#/definitions/__schema95"
+          },
+          "pointSets": {
+            "$ref": "#/definitions/__schema96"
           },
           "steps": {
-            "$ref": "#/definitions/__schema71"
+            "$ref": "#/definitions/__schema97"
           }
         },
         "required": [
@@ -358,8 +361,11 @@
         "geometry": {
           "$ref": "#/definitions/__schema32"
         },
-        "steps": {
+        "pointSets": {
           "$ref": "#/definitions/__schema34"
+        },
+        "steps": {
+          "$ref": "#/definitions/__schema36"
         }
       },
       "required": [
@@ -759,6 +765,22 @@
       "minLength": 1
     },
     "__schema34": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/__schema35"
+      }
+    },
+    "__schema35": {
+      "minItems": 2,
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/__schema20"
+      }
+    },
+    "__schema36": {
       "type": "array",
       "items": {
         "type": "object",
@@ -793,12 +815,12 @@
             "description": "Duración a velocidad 1×. Por defecto 4200.",
             "allOf": [
               {
-                "$ref": "#/definitions/__schema35"
+                "$ref": "#/definitions/__schema37"
               }
             ]
           },
           "scene": {
-            "$ref": "#/definitions/__schema36"
+            "$ref": "#/definitions/__schema38"
           }
         },
         "required": [
@@ -811,26 +833,34 @@
         "additionalProperties": false
       }
     },
-    "__schema35": {
+    "__schema37": {
       "type": "integer",
       "minimum": 800,
       "maximum": 20000
     },
-    "__schema36": {
+    "__schema38": {
       "type": "object",
       "properties": {
         "hook": {
           "description": "Animación de la aguja en este paso (hereda stage.hook). false = sin aguja.",
           "allOf": [
             {
-              "$ref": "#/definitions/__schema37"
+              "$ref": "#/definitions/__schema39"
+            }
+          ]
+        },
+        "strands": {
+          "description": "Hilos continuos de la escena. Las capas dibujan tramos de ellos con `strand` + `range`.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/__schema40"
             }
           ]
         },
         "layers": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema38"
+            "$ref": "#/definitions/__schema44"
           },
           "description": "Capas en orden de dibujo: primero las de atrás."
         },
@@ -862,7 +892,7 @@
                 "description": "Lado del ancla donde aparece. Por defecto: top.",
                 "allOf": [
                   {
-                    "$ref": "#/definitions/__schema56"
+                    "$ref": "#/definitions/__schema81"
                   }
                 ]
               },
@@ -870,7 +900,7 @@
                 "description": "Alineación horizontal respecto al ancla (top/bottom).",
                 "allOf": [
                   {
-                    "$ref": "#/definitions/__schema57"
+                    "$ref": "#/definitions/__schema82"
                   }
                 ]
               },
@@ -889,7 +919,7 @@
                     "$ref": "#/definitions/__schema26"
                   },
                   "to": {
-                    "$ref": "#/definitions/__schema58"
+                    "$ref": "#/definitions/__schema83"
                   }
                 },
                 "required": [
@@ -914,7 +944,7 @@
       ],
       "additionalProperties": false
     },
-    "__schema37": {
+    "__schema39": {
       "anyOf": [
         {
           "type": "boolean",
@@ -925,139 +955,42 @@
         }
       ]
     },
-    "__schema38": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "description": "Identificador único de la capa dentro del paso.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema1"
-            }
-          ]
-        },
-        "role": {
-          "type": "string",
-          "enum": [
-            "yarn",
-            "guide",
-            "hand",
-            "focus"
-          ],
-          "description": "yarn = hilo · guide = flecha/guía · hand = silueta de dedo · focus = anillo de atención."
-        },
-        "depth": {
-          "description": "Delante o detrás de la aguja. Por defecto: front.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema39"
-            }
-          ]
-        },
-        "translucent": {
-          "description": "Tramo físicamente oculto: se dibuja con transparencia.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema40"
-            }
-          ]
-        },
-        "attach": {
-          "description": "La capa viaja pegada a la aguja (p. ej. la hebra en la garganta).",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema41"
-            }
-          ]
-        },
-        "d": {
-          "anyOf": [
-            {
-              "$ref": "#/definitions/__schema33"
-            },
-            {
-              "$ref": "#/definitions/__schema42"
-            }
-          ],
-          "description": "Trazado SVG fijo, referencia \"@nombre\" o morphing [[momento, trazado], …] (mismos comandos en todos)."
-        },
-        "draw": {
-          "description": "Fracción visible del trazado (0–1). Atajo: { \"from\": 0.1, \"to\": 0.4 } lo dibuja de 0 a 1.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema44"
-            }
-          ]
-        },
-        "trim": {
-          "description": "Recorta desde el inicio del trazado (0–1): la hebra que se va.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema46"
-            }
-          ]
-        },
-        "opacity": {
-          "description": "Opacidad 0–1, fija o animada.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema48"
-            }
-          ]
-        },
-        "translate": {
-          "description": "Desplazamiento [x, y] en unidades del viewBox.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema50"
-            }
-          ]
-        },
-        "active": {
-          "description": "Solo hilo: 0 = hilo base (azul), 1 = hilo activo (amarillo).",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema52"
-            }
-          ]
-        },
-        "marker": {
-          "description": "Punta que viaja con el extremo del trazo mientras se dibuja.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema54"
-            }
-          ]
-        },
-        "label": {
-          "description": "Descripción breve para depuración.",
-          "allOf": [
-            {
-              "$ref": "#/definitions/__schema55"
-            }
-          ]
-        }
-      },
-      "required": [
-        "id",
-        "role",
-        "d"
-      ],
-      "additionalProperties": false
-    },
-    "__schema39": {
-      "type": "string",
-      "enum": [
-        "back",
-        "front"
-      ]
-    },
     "__schema40": {
-      "type": "boolean"
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/definitions/__schema1"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "points": {
+            "anyOf": [
+              {
+                "$ref": "#/definitions/__schema41"
+              },
+              {
+                "$ref": "#/definitions/__schema42"
+              }
+            ],
+            "description": "Puntos del hilo, fijos o animados: [[momento, \"@pointSet\"], …]. Mismo nº de puntos en todos."
+          }
+        },
+        "required": [
+          "points"
+        ],
+        "additionalProperties": false
+      }
     },
     "__schema41": {
-      "type": "string",
-      "const": "hook"
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^@"
+        },
+        {
+          "$ref": "#/definitions/__schema35"
+        }
+      ]
     },
     "__schema42": {
       "minItems": 1,
@@ -1067,6 +1000,177 @@
       }
     },
     "__schema43": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema41"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema41"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema44": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/__schema45"
+        },
+        "role": {
+          "$ref": "#/definitions/__schema46"
+        },
+        "depth": {
+          "$ref": "#/definitions/__schema47"
+        },
+        "translucent": {
+          "$ref": "#/definitions/__schema49"
+        },
+        "attach": {
+          "$ref": "#/definitions/__schema51"
+        },
+        "d": {
+          "$ref": "#/definitions/__schema53"
+        },
+        "strand": {
+          "$ref": "#/definitions/__schema56"
+        },
+        "range": {
+          "$ref": "#/definitions/__schema57"
+        },
+        "draw": {
+          "$ref": "#/definitions/__schema59"
+        },
+        "trim": {
+          "$ref": "#/definitions/__schema62"
+        },
+        "opacity": {
+          "$ref": "#/definitions/__schema65"
+        },
+        "translate": {
+          "$ref": "#/definitions/__schema68"
+        },
+        "active": {
+          "$ref": "#/definitions/__schema71"
+        },
+        "activeFrom": {
+          "$ref": "#/definitions/__schema74"
+        },
+        "marker": {
+          "$ref": "#/definitions/__schema77"
+        },
+        "label": {
+          "$ref": "#/definitions/__schema79"
+        }
+      },
+      "required": [
+        "id",
+        "role"
+      ],
+      "additionalProperties": false
+    },
+    "__schema45": {
+      "description": "Identificador único de la capa dentro del paso.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema1"
+        }
+      ]
+    },
+    "__schema46": {
+      "type": "string",
+      "enum": [
+        "yarn",
+        "guide",
+        "hand",
+        "focus"
+      ],
+      "description": "yarn = hilo · guide = flecha/guía · hand = silueta de dedo · focus = anillo de atención."
+    },
+    "__schema47": {
+      "description": "Delante o detrás de la aguja. Por defecto: front.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema48"
+        }
+      ]
+    },
+    "__schema48": {
+      "type": "string",
+      "enum": [
+        "back",
+        "front"
+      ]
+    },
+    "__schema49": {
+      "description": "Tramo físicamente oculto: se dibuja con transparencia.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema50"
+        }
+      ]
+    },
+    "__schema50": {
+      "type": "boolean"
+    },
+    "__schema51": {
+      "description": "La capa viaja pegada a la aguja (p. ej. la hebra en la garganta).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema52"
+        }
+      ]
+    },
+    "__schema52": {
+      "type": "string",
+      "const": "hook"
+    },
+    "__schema53": {
+      "description": "Trazado SVG fijo, referencia \"@nombre\" o morphing [[momento, trazado], …] (mismos comandos en todos).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema54"
+        }
+      ]
+    },
+    "__schema54": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema33"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema55"
+          }
+        }
+      ]
+    },
+    "__schema55": {
       "anyOf": [
         {
           "type": "array",
@@ -1101,7 +1205,49 @@
         }
       ]
     },
-    "__schema44": {
+    "__schema56": {
+      "description": "Hilo continuo (id de scene.strands) del que esta capa dibuja un tramo.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema1"
+        }
+      ]
+    },
+    "__schema57": {
+      "description": "Tramo del hilo [desde, hasta] en índices de punto. Tramos contiguos encajan sin costura.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema58"
+        }
+      ]
+    },
+    "__schema58": {
+      "type": "array",
+      "items": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      ],
+      "additionalItems": false,
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "__schema59": {
+      "description": "Fracción visible del trazado (0–1). Atajo: { \"from\": 0.1, \"to\": 0.4 } lo dibuja de 0 a 1.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema60"
+        }
+      ]
+    },
+    "__schema60": {
       "anyOf": [
         {
           "$ref": "#/definitions/__schema26"
@@ -1110,7 +1256,7 @@
           "minItems": 1,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema45"
+            "$ref": "#/definitions/__schema61"
           }
         },
         {
@@ -1138,7 +1284,7 @@
         }
       ]
     },
-    "__schema45": {
+    "__schema61": {
       "anyOf": [
         {
           "type": "array",
@@ -1173,7 +1319,15 @@
         }
       ]
     },
-    "__schema46": {
+    "__schema62": {
+      "description": "Recorta desde el inicio del trazado (0–1): la hebra que se va.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema63"
+        }
+      ]
+    },
+    "__schema63": {
       "anyOf": [
         {
           "$ref": "#/definitions/__schema26"
@@ -1182,12 +1336,12 @@
           "minItems": 1,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema47"
+            "$ref": "#/definitions/__schema64"
           }
         }
       ]
     },
-    "__schema47": {
+    "__schema64": {
       "anyOf": [
         {
           "type": "array",
@@ -1222,7 +1376,15 @@
         }
       ]
     },
-    "__schema48": {
+    "__schema65": {
+      "description": "Opacidad 0–1, fija o animada.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema66"
+        }
+      ]
+    },
+    "__schema66": {
       "anyOf": [
         {
           "$ref": "#/definitions/__schema26"
@@ -1231,12 +1393,12 @@
           "minItems": 1,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema49"
+            "$ref": "#/definitions/__schema67"
           }
         }
       ]
     },
-    "__schema49": {
+    "__schema67": {
       "anyOf": [
         {
           "type": "array",
@@ -1271,7 +1433,15 @@
         }
       ]
     },
-    "__schema50": {
+    "__schema68": {
+      "description": "Desplazamiento [x, y] en unidades del viewBox.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema69"
+        }
+      ]
+    },
+    "__schema69": {
       "anyOf": [
         {
           "$ref": "#/definitions/__schema20"
@@ -1280,12 +1450,12 @@
           "minItems": 1,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema51"
+            "$ref": "#/definitions/__schema70"
           }
         }
       ]
     },
-    "__schema51": {
+    "__schema70": {
       "anyOf": [
         {
           "type": "array",
@@ -1320,7 +1490,15 @@
         }
       ]
     },
-    "__schema52": {
+    "__schema71": {
+      "description": "Solo hilo: 0 = hilo base (azul), 1 = hilo activo (amarillo).",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema72"
+        }
+      ]
+    },
+    "__schema72": {
       "anyOf": [
         {
           "$ref": "#/definitions/__schema26"
@@ -1329,12 +1507,12 @@
           "minItems": 1,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema53"
+            "$ref": "#/definitions/__schema73"
           }
         }
       ]
     },
-    "__schema53": {
+    "__schema73": {
       "anyOf": [
         {
           "type": "array",
@@ -1369,17 +1547,90 @@
         }
       ]
     },
-    "__schema54": {
+    "__schema74": {
+      "description": "Solo tramos de hilo: tono al inicio del tramo. El color pasa en degradado de `activeFrom` a `active`.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema75"
+        }
+      ]
+    },
+    "__schema75": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/__schema26"
+        },
+        {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/__schema76"
+          }
+        }
+      ]
+    },
+    "__schema76": {
+      "anyOf": [
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "array",
+          "items": [
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema26"
+            },
+            {
+              "$ref": "#/definitions/__schema27"
+            }
+          ],
+          "additionalItems": false,
+          "minItems": 3,
+          "maxItems": 3
+        }
+      ]
+    },
+    "__schema77": {
+      "description": "Punta que viaja con el extremo del trazo mientras se dibuja.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema78"
+        }
+      ]
+    },
+    "__schema78": {
       "type": "string",
       "enum": [
         "arrow",
         "dot"
       ]
     },
-    "__schema55": {
+    "__schema79": {
+      "description": "Descripción breve para depuración.",
+      "allOf": [
+        {
+          "$ref": "#/definitions/__schema80"
+        }
+      ]
+    },
+    "__schema80": {
       "type": "string"
     },
-    "__schema56": {
+    "__schema81": {
       "type": "string",
       "enum": [
         "top",
@@ -1388,7 +1639,7 @@
         "right"
       ]
     },
-    "__schema57": {
+    "__schema82": {
       "type": "string",
       "enum": [
         "start",
@@ -1396,14 +1647,14 @@
         "end"
       ]
     },
-    "__schema58": {
+    "__schema83": {
       "allOf": [
         {
           "$ref": "#/definitions/__schema26"
         }
       ]
     },
-    "__schema59": {
+    "__schema84": {
       "type": "object",
       "properties": {
         "id": {
@@ -1550,7 +1801,7 @@
       ],
       "additionalProperties": false
     },
-    "__schema60": {
+    "__schema85": {
       "type": "object",
       "properties": {
         "id": {
@@ -1581,7 +1832,7 @@
       ],
       "additionalProperties": false
     },
-    "__schema61": {
+    "__schema86": {
       "type": "object",
       "properties": {
         "id": {
@@ -1647,19 +1898,19 @@
       ],
       "additionalProperties": false
     },
-    "__schema62": {
+    "__schema87": {
       "type": "string",
       "enum": [
         "published",
         "draft"
       ]
     },
-    "__schema63": {
+    "__schema88": {
       "type": "integer",
       "minimum": 1,
       "maximum": 5
     },
-    "__schema64": {
+    "__schema89": {
       "type": "object",
       "properties": {
         "shape": {
@@ -1669,7 +1920,7 @@
           "minItems": 1,
           "type": "array",
           "items": {
-            "$ref": "#/definitions/__schema65"
+            "$ref": "#/definitions/__schema90"
           }
         }
       },
@@ -1679,19 +1930,19 @@
       ],
       "additionalProperties": false
     },
-    "__schema65": {
+    "__schema90": {
       "type": "string",
       "pattern": "^#[0-9a-fA-F]{6}$"
     },
-    "__schema66": {
+    "__schema91": {
       "type": "number",
       "exclusiveMinimum": 0
     },
-    "__schema67": {
+    "__schema92": {
       "type": "number",
       "exclusiveMinimum": 0
     },
-    "__schema68": {
+    "__schema93": {
       "type": "object",
       "properties": {
         "materials": {
@@ -1725,14 +1976,14 @@
       ],
       "additionalProperties": false
     },
-    "__schema69": {
+    "__schema94": {
       "allOf": [
         {
           "$ref": "#/definitions/__schema14"
         }
       ]
     },
-    "__schema70": {
+    "__schema95": {
       "type": "object",
       "propertyNames": {
         "type": "string"
@@ -1741,7 +1992,16 @@
         "$ref": "#/definitions/__schema33"
       }
     },
-    "__schema71": {
+    "__schema96": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string"
+      },
+      "additionalProperties": {
+        "$ref": "#/definitions/__schema35"
+      }
+    },
+    "__schema97": {
       "type": "array",
       "items": {
         "type": "object",
@@ -1778,7 +2038,7 @@
           "scene": {
             "allOf": [
               {
-                "$ref": "#/definitions/__schema36"
+                "$ref": "#/definitions/__schema38"
               }
             ]
           }

@@ -21,6 +21,16 @@ export interface Track<T> {
   ease: EaseName[];
 }
 
+/** Degradado de tono a lo largo de un tramo (del primer al último punto). */
+export interface CompiledGradient {
+  /** Tono en el inicio del tramo (el final usa `active`). */
+  from: Track<number>;
+  x1: Track<number>;
+  y1: Track<number>;
+  x2: Track<number>;
+  y2: Track<number>;
+}
+
 export interface CompiledLayer {
   id: string;
   role: LayerRole;
@@ -38,6 +48,7 @@ export interface CompiledLayer {
   translateX: Track<number>;
   translateY: Track<number>;
   active: Track<number>;
+  gradient: CompiledGradient | null;
   /** `true` si `draw`/`trim` cambian: activa la animación de trazo. */
   animatesStroke: boolean;
 }

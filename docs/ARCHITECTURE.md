@@ -33,7 +33,8 @@ crochet-data.json ──► Zod (schema.ts) ──► validate.ts ──► comp
 │   ├── SETUP.md                 # comandos de instalación (Fase 2)
 │   └── CONTRIBUTING.md
 ├── scripts/
-│   └── generate-content-schema.ts   # Zod → JSON Schema para el editor
+│   ├── generate-content-schema.ts   # Zod → JSON Schema para el editor
+│   └── authoring/cadeneta.ts        # (opcional) calcula los puntos del hilo de la cadeneta
 ├── src/
 │   ├── app/                     # App Router (rutas = páginas de la SPA)
 │   │   ├── layout.tsx           # fuentes, metadatos, favicon SVG en línea
@@ -84,6 +85,7 @@ crochet-data.json ──► Zod (schema.ts) ──► validate.ts ──► comp
 | **Progreso como `MotionValue`** | 60 fps sin re-renderizar React. El slider, reproducir/pausar y el avance automático controlan un único número. |
 | **Atributo SVG `transform` escrito a mano** | Motion convierte `transform` en CSS, que no admite `rotate(ángulo cx cy)`. La aguja necesita girar sobre su garganta. |
 | **Etiquetas en HTML, no en `<text>`** | Texto nítido y legible en móvil, sin depender de la escala del SVG. |
+| **Hilo continuo por puntos** (`strand.ts`) | Un hilo real tiene dos puntas: se describe como una lista de puntos y se anima moviéndolos. Las capas son tramos de la misma curva (sin costuras), y la profundidad delante/detrás se resuelve por tramos. |
 | **Aguja paramétrica** (`hook-geometry.ts`) | Todos los perfiles comparten estructura, así que se puede interpolar entre tipos de aguja. La anatomía y el reproductor usan el mismo generador. |
 | **Progreso en `localStorage`** + `useSyncExternalStore` | Sin cuentas ni servidor. Sin desajustes de hidratación y sincronizado entre pestañas. |
 | **`output: "export"`** | Despliegue en cualquier hosting estático. Las rutas dinámicas de la Fase 4 se generarán desde el JSON con `generateStaticParams`. |

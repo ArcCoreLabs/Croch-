@@ -55,6 +55,11 @@ const ease = z.enum(EASINGS);
  */
 const pathData = z.string().trim().min(1);
 
+/** Lista de puntos [x, y] por los que pasa un hilo continuo (de la cola al ovillo). */
+const pointList = z.array(point).min(2);
+/** Lista de puntos en línea o referencia a `technique.pointSets` (`"@nombre"`). */
+const pointsValue = z.union([z.string().regex(/^@/, 'Usa "@nombre" para referenciar un pointSet.'), pointList]);
+
 /** Fotograma clave compacto: `[momento, valor]` o `[momento, valor, easing]`. */
 function keyframe<T extends z.ZodType>(value: T) {
   return z.union([z.tuple([unit, value]), z.tuple([unit, value, ease])]);
@@ -106,9 +111,14 @@ export const layerSchema = z.strictObject({
   depth: z.enum(["back", "front"]).optional().describe("Delante o detrás de la aguja. Por defecto: front."),
   translucent: z.boolean().optional().describe("Tramo físicamente oculto: se dibuja con transparencia."),
   attach: z.literal("hook").optional().describe("La capa viaja pegada a la aguja (p. ej. la hebra en la garganta)."),
-  d: animatable(pathData).describe(
-    'Trazado SVG fijo, referencia "@nombre" o morphing [[momento, trazado], …] (mismos comandos en todos).',
-  ),
+  d: animatable(pathData)
+    .optional()
+    .describe('Trazado SVG fijo, referencia "@nombre" o morphing [[momento, trazado], …] (mismos comandos en todos).'),
+  strand: slug.optional().describe("Hilo continuo (id de scene.strands) del que esta capa dibuja un tramo."),
+  range: z
+    .tuple([z.number().int().min(0), z.number().int().min(1)])
+    .optional()
+    .describe("Tramo del hilo [desde, hasta] en índices de punto. Tramos contiguos encajan sin costura."),
   draw: z
     .union([unit, track(unit), drawWindowSchema])
     .optional()
@@ -117,9 +127,28 @@ export const layerSchema = z.strictObject({
   opacity: animatable(unit).optional().describe("Opacidad 0–1, fija o animada."),
   translate: animatable(point).optional().describe("Desplazamiento [x, y] en unidades del viewBox."),
   active: animatable(unit).optional().describe("Solo hilo: 0 = hilo base (azul), 1 = hilo activo (amarillo)."),
+  activeFrom: animatable(unit)
+    .optional()
+    .describe("Solo tramos de hilo: tono al inicio del tramo. El color pasa en degradado de `activeFrom` a `active`."),
   marker: z.enum(["arrow", "dot"]).optional().describe("Punta que viaja con el extremo del trazo mientras se dibuja."),
   label: z.string().optional().describe("Descripción breve para depuración."),
-});
+})
+  .superRefine((layer, ctx) => {
+    const hasPath = layer.d !== undefined;
+    const hasStrand = layer.strand !== undefined;
+    if (hasPath === hasStrand) {
+      ctx.addIssue({ code: "custom", path: ["d"], message: "Define `d` o bien `strand` + `range` (uno de los dos)." });
+    }
+    if (hasStrand && !layer.range) {
+      ctx.addIssue({ code: "custom", path: ["range"], message: "Una capa de hilo continuo necesita `range`." });
+    }
+    if (layer.activeFrom !== undefined && !hasStrand) {
+      ctx.addIssue({ code: "custom", path: ["activeFrom"], message: "`activeFrom` solo se usa en tramos de hilo (`strand`)." });
+    }
+    if (layer.range && layer.range[0] >= layer.range[1]) {
+      ctx.addIssue({ code: "custom", path: ["range"], message: "`range` debe ir de un índice menor a uno mayor." });
+    }
+  });
 export type LayerInput = z.infer<typeof layerSchema>;
 
 export const calloutSchema = z.strictObject({
@@ -151,10 +180,22 @@ export const sceneSchema = z.strictObject({
     .union([z.literal(false), hookActorSchema])
     .optional()
     .describe("Animación de la aguja en este paso (hereda stage.hook). false = sin aguja."),
+  strands: z
+    .record(
+      slug,
+      z.strictObject({
+        points: z
+          .union([pointsValue, track(pointsValue)])
+          .describe('Puntos del hilo, fijos o animados: [[momento, "@pointSet"], …]. Mismo nº de puntos en todos.'),
+      }),
+    )
+    .optional()
+    .describe("Hilos continuos de la escena. Las capas dibujan tramos de ellos con `strand` + `range`."),
   layers: z.array(layerSchema).describe("Capas en orden de dibujo: primero las de atrás."),
   callouts: z.array(calloutSchema).optional(),
 });
 export type SceneInput = z.infer<typeof sceneSchema>;
+export type StrandInput = NonNullable<SceneInput["strands"]>[string];
 
 export const stepSchema = z.strictObject({
   id: slug,
@@ -201,6 +242,8 @@ export const techniqueSchema = z
     stage: stageSchema.optional(),
     /** Geometrías con nombre reutilizables en los pasos (`"@nombre"`). */
     geometry: z.record(z.string(), pathData).optional(),
+    /** Listas de puntos con nombre para los hilos continuos (`"@nombre"`). */
+    pointSets: z.record(z.string(), pointList).optional(),
     steps: z.array(stepSchema),
   })
   .superRefine((technique, ctx) => {
@@ -335,6 +378,7 @@ export const projectSchema = z
     }),
     stage: stageSchema.optional(),
     geometry: z.record(z.string(), pathData).optional(),
+    pointSets: z.record(z.string(), pointList).optional(),
     steps: z.array(projectStepSchema),
   })
   .superRefine((project, ctx) => {

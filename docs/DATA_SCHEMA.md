@@ -55,6 +55,7 @@ Cada técnica dominada suma `(fin − inicio) / nº de técnicas` de su nivel.
 | `materials`, `tips`, `commonMistakes` | opcionales | |
 | `stage` | `{ viewBox, hook? }` | Escenario común a todos los pasos (obligatorio si hay pasos). |
 | `geometry` | `{ nombre: trazado }` | Trazados con nombre que los pasos usan como `"@nombre"`. |
+| `pointSets` | `{ nombre: [[x, y], …] }` | Listas de puntos con nombre para los hilos continuos (`"@nombre"`). |
 | `steps` | `Step[]` | Pasos ilimitados. |
 
 ### Paso: `steps[]`
@@ -96,6 +97,28 @@ Hereda `stage.hook` (`type`, `tip`, `radius`) y añade la animación:
 
 Usa `"hook": false` para un paso sin aguja. La aguja se genera con código a partir del perfil de `tools.hooks[type]`.
 
+### Hilos continuos: `scene.strands`
+
+**Un hilo real tiene dos puntas y nunca se corta**, así que el hilo se describe como **una sola lista de puntos** por los que pasa: de la punta de la cola hasta el ovillo. La app lo dibuja como una curva suave (Catmull-Rom convertida a Bézier). Para animarlo se mueven los puntos, no se cambian piezas:
+
+```jsonc
+"strands": {
+  "hilo": {
+    "points": [[0.1, "@lazada-0"], [0.5, "@tirar-0", "easeInOut"], [0.94, "@reposo-1", "easeInOut"]]
+  }
+}
+```
+
+- Cada fotograma es un `pointSet` (`"@nombre"`) o una lista en línea. **Todos los fotogramas deben tener el mismo número de puntos**: el punto 17 es siempre el mismo trocito de hilo, que se desplaza.
+- Las capas dibujan **tramos** del hilo: `{ "strand": "hilo", "range": [desde, hasta] }`, en índices de punto. Dos tramos contiguos (`[10, 20]` y `[20, 30]`) encajan sin costura porque son exactamente la misma curva.
+- La **profundidad** se decide por tramos, no cortando el hilo:
+  - Los tramos con `depth: "back"`, en orden de hilo, quedan detrás de la aguja. En un cruce, el tramo posterior pasa por encima.
+  - Los tramos que van **delante** de la aguja (por ejemplo, la mitad delantera de un bucle) se repiten como capa sin `depth`. Es el mismo hilo dibujado otra vez encima.
+- **Cambio de color sin "corte":** un tramo corto con `activeFrom` hace un degradado de tono entre su primer y su último punto. Se usa en el "cuello", donde la hebra de trabajo (amarilla) sale de la labor (azul).
+- **Cambiar de profundidad sin saltos:** anima la `opacity` de la capa delantera justo cuando ese tramo no se superpone a la aguja (por ejemplo, con la hebra alzada por encima de la cabeza).
+
+La lección de cadeneta usa un hilo de 51 puntos: cola y nudo (0–10), tres bloques de bucle (11–40) y la hebra hasta el ovillo (41–50). Sus coordenadas las calcula una herramienta de autoría opcional, [`scripts/authoring/cadeneta.ts`](../scripts/authoring/cadeneta.ts), que reescribe los `pointSets` y las escenas en el JSON (`npx tsx scripts/authoring/cadeneta.ts`). La app solo lee el JSON: se puede editar a mano igual que cualquier otra técnica.
+
 ### Capas: `scene.layers[]`
 
 Se dibujan en orden: las de `depth: "back"` van **detrás** de la aguja y el resto **delante**. La aguja es semitransparente, así se ve el hilo que cruza por detrás.
@@ -108,11 +131,13 @@ Se dibujan en orden: las de `depth: "back"` van **detrás** de la aguja y el res
 | `translucent` | `boolean` | Tramo físicamente oculto (se ve por transparencia). |
 | `attach` | `"hook"` | La capa se mueve con la aguja (la hebra en la garganta). |
 | `d` | trazado · `"@nombre"` · pista | Geometría. Con varios trazados hay **morphing**. |
+| `strand` + `range` | id · `[desde, hasta]` | En lugar de `d`: tramo de un hilo continuo (ver arriba). |
 | `draw` | `0–1` · pista · `{ from, to, ease? }` | Parte visible del trazo: el hilo "se dibuja". |
 | `trim` | `0–1` · pista | Recorta desde el inicio: la hebra que se va. |
 | `opacity` | `0–1` · pista | |
 | `translate` | `[x, y]` · pista | Desplaza la capa (p. ej. la cadena que baja). |
 | `active` | `0–1` · pista | **Solo hilo:** 0 = hilo base azul, 1 = hilo activo amarillo. |
+| `activeFrom` | `0–1` · pista | **Solo tramos de hilo:** tono al inicio del tramo; el color pasa en degradado hasta `active`. |
 | `marker` | `arrow` · `dot` | Punta que viaja con el extremo del trazo. |
 
 **Reglas del morphing:** todos los trazados de una pista `d` deben tener **los mismos comandos en el mismo orden y la misma cantidad de números**. Por ejemplo, un bucle `"M x y C x y, x y, x y"` se transforma en un eslabón con la misma forma de comandos. El validador avisa si no coinciden.
@@ -140,7 +165,7 @@ Se dibujan en orden: las de `depth: "back"` van **detrás** de la aguja y el res
 ## Receta: añadir una técnica nueva sin tocar React
 
 1. Añade la técnica a `techniques` con `status: "draft"` y su `id` en `levels[n].techniques`. Ya aparece en la ruta como "pronto".
-2. Define `stage.viewBox` y `stage.hook`. Dibuja las piezas en `geometry`, por ejemplo con un editor vectorial: exporta el `d` de cada trazado y redondea las coordenadas.
+2. Define `stage.viewBox` y `stage.hook`. Describe el hilo como **un solo** `strand`, con `pointSets` para cada fase (mismo número de puntos), y reparte la profundidad en tramos. Las flechas y anillos de ayuda pueden ser trazados `d` en `geometry`.
 3. Escribe los pasos en orden de micro-movimiento. Copia la escena final de un paso como punto de partida del siguiente.
 4. Ejecuta `npm test`. El validador señala referencias rotas, morphing incompatible o saltos de la aguja.
 5. Cambia `status` a `"published"`. El reproductor la consume tal cual.

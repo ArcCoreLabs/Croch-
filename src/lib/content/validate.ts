@@ -1,5 +1,6 @@
 import { areMorphCompatible, isValidPathData } from "@/lib/svg/path-utils";
 import type { CrochetData, SceneInput } from "./schema";
+import { resolveStrandFrames, type PointSets } from "./strands";
 
 /**
  * Validación semántica del contenido (lo que un esquema por sí solo no ve):
@@ -92,7 +93,15 @@ export function validateContentReferences(data: CrochetData): ContentIssue[] {
 
     checkUnique(`${base}.steps`, technique.steps.map((s) => s.id));
     technique.steps.forEach((step) => {
-      validateScene(step.scene, `${base}.steps.${step.id}.scene`, technique.geometry, data.svgLibrary.shapes, hookIds, push);
+      validateScene(
+        step.scene,
+        `${base}.steps.${step.id}.scene`,
+        technique.geometry,
+        data.svgLibrary.shapes,
+        technique.pointSets,
+        hookIds,
+        push,
+      );
     });
   }
 
@@ -122,7 +131,15 @@ export function validateContentReferences(data: CrochetData): ContentIssue[] {
         push(`${base}.steps.${step.id}.technique`, `Técnica inexistente: "${step.technique}".`);
       }
       if (step.scene) {
-        validateScene(step.scene, `${base}.steps.${step.id}.scene`, project.geometry, data.svgLibrary.shapes, hookIds, push);
+        validateScene(
+          step.scene,
+          `${base}.steps.${step.id}.scene`,
+          project.geometry,
+          data.svgLibrary.shapes,
+          project.pointSets,
+          hookIds,
+          push,
+        );
       }
     });
   }
@@ -140,6 +157,7 @@ function validateScene(
   base: string,
   local: GeometryTable,
   library: Record<string, string>,
+  pointSets: PointSets,
   hookIds: Set<string>,
   push: (path: string, message: string) => void,
 ) {
@@ -152,9 +170,29 @@ function validateScene(
   const calloutIds = (scene.callouts ?? []).map((c) => c.id);
   for (const dupe of findDuplicates(calloutIds)) push(`${base}.callouts`, `Etiqueta duplicada: "${dupe}".`);
 
+  const strandLengths = new Map<string, number>();
+  Object.entries(scene.strands ?? {}).forEach(([id, strand]) => {
+    const frames = resolveStrandFrames(strand, pointSets);
+    frames.forEach((frame) => {
+      if (frame.points === null) push(`${base}.strands.${id}`, `pointSet no encontrado: "${frame.ref}".`);
+    });
+    const lengths = new Set(frames.filter((f) => f.points !== null).map((f) => f.points!.length));
+    if (lengths.size > 1) {
+      push(`${base}.strands.${id}`, `Todos los fotogramas de un hilo deben tener los mismos puntos (hay ${[...lengths].join(", ")}).`);
+    }
+    if (lengths.size === 1) strandLengths.set(id, [...lengths][0]);
+  });
+
   scene.layers.forEach((layer) => {
     const path = `${base}.layers.${layer.id}`;
-    const rawPaths = Array.isArray(layer.d) ? layer.d.map((frame) => frame[1]) : [layer.d];
+    if (layer.strand !== undefined) {
+      const length = strandLengths.get(layer.strand);
+      if (!scene.strands?.[layer.strand]) push(`${path}.strand`, `Hilo inexistente en la escena: "${layer.strand}".`);
+      else if (length !== undefined && layer.range && layer.range[1] > length - 1) {
+        push(`${path}.range`, `El tramo [${layer.range.join(", ")}] se sale del hilo (${length} puntos).`);
+      }
+    }
+    const rawPaths = layer.d === undefined ? [] : Array.isArray(layer.d) ? layer.d.map((frame) => frame[1]) : [layer.d];
 
     const resolved: string[] = [];
     rawPaths.forEach((value) => {
@@ -163,7 +201,7 @@ function validateScene(
       else if (!isValidPathData(d)) push(`${path}.d`, `Trazado SVG no válido: "${value.slice(0, 40)}…".`);
       else resolved.push(d);
     });
-    if (resolved.length === rawPaths.length && !areMorphCompatible(resolved)) {
+    if (rawPaths.length > 0 && resolved.length === rawPaths.length && !areMorphCompatible(resolved)) {
       push(
         `${path}.d`,
         "Los trazados del morphing no son compatibles: deben tener los mismos comandos (M, C, L…) y la misma cantidad de números.",
