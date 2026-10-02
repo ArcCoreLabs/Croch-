@@ -13,6 +13,8 @@ export const STAGE_COLORS = {
   yarn: {
     base: { core: "#5b9bff", outline: "#1b3a78", sheen: "#b9d4ff" },
     active: { core: "#ffd43b", outline: "#7a5600", sheen: "#fff3b8" },
+    /** Punto medio de la transición base ↔ activo. */
+    glow: { core: "#fff6e3", outline: "#6b6150", sheen: "#ffffff" },
   },
   guide: "#fff4e0",
   focus: "#ffd43b",

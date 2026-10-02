@@ -97,18 +97,26 @@
         "eslabon-frente": "M 150 142 C 135 142, 135 176, 150 176",
         "eslabon-detras": "M 150 176 C 165 176, 165 142, 150 142",
         "hebra-reposo": "M 152 148 C 146 134, 134 118, 120 104 C 96 80, 48 36, 8 14",
+        "hebra-tramo-1": "M 152 148 C 146 134, 134 118, 120 104",
+        "hebra-tramo-2": "M 120 104 C 114 98, 106.5 90.75, 98 82.91",
+        "hebra-tramo-3": "M 98 82.91 C 85.25 71.14, 70.25 58.04, 54.69 45.82 C 39.12 33.59, 23 22.25, 8 14",
         "hebra-subida": "M 152 148 C 146 134, 128 112, 115 106",
         "hebra-subida-tirar": "M 152 148 C 160 132, 180 112, 191 106",
-        "hebra-garganta": "M 115 106 Q 108 112 107 122",
+        "hebra-garganta": "M 115 106 C 110 108, 107 116, 107 122",
+        "hebra-garganta-tirar": "M 191 106 C 186 108, 183 116, 183 122",
         "hebra-alimentacion": "M 107 122 C 100 131, 86 128, 76 110 C 62 84, 36 40, 8 14",
         "hebra-alimentacion-tirar": "M 183 122 C 176 131, 150 140, 120 110 C 92 82, 40 38, 8 14",
-        "bucle-nuevo-estirado-frente": "M 191 106 C 178 101, 152 118, 150 140",
-        "bucle-nuevo-estirado-detras": "M 150 140 C 168 140, 197 126, 191 106",
+        "bucle-viejo-arrastrado-frente": "M 156 106 C 142 106, 140 150, 151 152",
+        "bucle-viejo-arrastrado-detras": "M 151 152 C 166 152, 170 106, 156 106",
+        "bucle-viejo-cerrado-frente": "M 152 128 C 141 128, 140 160, 150 162",
+        "bucle-viejo-cerrado-detras": "M 150 162 C 161 162, 163 128, 152 128",
         "flecha-introducir": "M 268 92 L 184 92",
         "flecha-lazada": "M 132 100 C 126 82, 100 82, 98 100",
         "flecha-tirar": "M 168 90 L 258 90",
         "anillo-bucle-libre": "M 150 84 C 180 84, 180 162, 150 162 C 120 162, 120 84, 150 84",
-        "anillo-eslabon": "M 150 136 C 176 136, 176 182, 150 182 C 124 182, 124 136, 150 136"
+        "anillo-eslabon": "M 150 136 C 176 136, 176 182, 150 182 C 124 182, 124 136, 150 136",
+        "anillo-garganta": "M 107 111 C 121.67 111, 121.67 133, 107 133 C 92.33 133, 92.33 111, 107 111",
+        "anillo-cierre": "M 152 120 C 180 120, 180 172, 152 172 C 124 172, 124 120, 152 120"
       },
       "steps": [
         {
@@ -173,23 +181,24 @@
           "title": "Haz una lazada",
           "instruction": "Pasa la hebra de trabajo por encima de la aguja, de atrás hacia adelante, y engánchala en la garganta. Gira apenas la aguja hacia ti para atraparla.",
           "tip": "Es la aguja la que va a buscar el hilo: mueve la muñeca, no el índice. Siempre de atrás hacia adelante; al revés, las cadenetas salen retorcidas.",
-          "durationMs": 5000,
+          "durationMs": 5400,
           "scene": {
-            "hook": { "rotate": [[0.12, 0], [0.42, -4]] },
+            "hook": { "rotate": [[0.14, 0], [0.46, -4]] },
             "layers": [
               { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola" },
               { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo" },
               { "id": "bucle-detras", "role": "yarn", "depth": "back", "d": "@bucle-detras" },
-              { "id": "hebra-trabajo", "role": "yarn", "depth": "back", "d": "@hebra-reposo", "active": [[0, 0], [0.14, 1]], "opacity": [[0.26, 1], [0.46, 0]] },
-              { "id": "hebra-subida", "role": "yarn", "depth": "back", "d": "@hebra-subida", "active": 1, "draw": { "from": 0.26, "to": 0.44 } },
-              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "d": "@hebra-alimentacion", "active": 1, "draw": { "from": 0.5, "to": 0.74 } },
-              { "id": "hebra-garganta", "role": "yarn", "attach": "hook", "d": "@hebra-garganta", "active": 1, "draw": { "from": 0.42, "to": 0.52 } },
+              { "id": "hebra-subida", "role": "yarn", "depth": "back", "d": [[0.22, "@hebra-tramo-1"], [0.64, "@hebra-subida", "easeInOut"]], "active": [[0, 0], [0.14, 1]] },
+              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "d": [[0.22, "@hebra-tramo-3"], [0.64, "@hebra-alimentacion", "easeInOut"]], "active": [[0, 0], [0.14, 1]] },
+              { "id": "hebra-garganta", "role": "yarn", "d": [[0.22, "@hebra-tramo-2"], [0.64, "@hebra-garganta", "easeInOut"]], "active": [[0, 0], [0.14, 1]] },
               { "id": "bucle-frente", "role": "yarn", "d": "@bucle-frente" },
-              { "id": "flecha", "role": "guide", "d": "@flecha-lazada", "marker": "arrow", "draw": { "from": 0.16, "to": 0.38 }, "opacity": [[0.84, 1], [0.96, 0]] }
+              { "id": "foco-garganta", "role": "focus", "attach": "hook", "d": "@anillo-garganta", "draw": { "from": 0.66, "to": 0.78 } },
+              { "id": "flecha", "role": "guide", "d": "@flecha-lazada", "marker": "arrow", "draw": { "from": 0.14, "to": 0.34 }, "opacity": [[0.7, 1], [0.82, 0]] }
             ],
             "callouts": [
-              { "id": "hebra", "text": "Hebra de trabajo", "at": [98, 80], "placement": "right", "show": { "from": 0.04, "to": 0.34 } },
-              { "id": "direccion", "text": "De atrás hacia adelante", "at": [116, 76], "show": { "from": 0.4 } }
+              { "id": "hebra", "text": "Hebra de trabajo", "at": [98, 80], "placement": "right", "show": { "from": 0.04, "to": 0.3 } },
+              { "id": "direccion", "text": "De atrás hacia adelante", "at": [116, 76], "show": { "from": 0.34, "to": 0.74 } },
+              { "id": "atrapa", "text": "La garganta atrapa la hebra", "at": [62, 146], "placement": "bottom", "align": "start", "show": { "from": 0.78 } }
             ]
           }
         },
@@ -197,29 +206,27 @@
           "id": "tirar",
           "phase": "pull-through",
           "title": "Tira a través del bucle",
-          "instruction": "Con la garganta mirando hacia abajo, tira de la lazada a través del bucle que tienes en la aguja. El bucle viejo se suelta y se convierte en tu primera cadeneta; el nuevo queda en la aguja.",
-          "tip": "Gira la garganta hacia abajo antes de tirar para que no se enganche. Acompaña el gesto subiendo la pinza, pegada a la aguja.",
-          "durationMs": 6000,
+          "instruction": "Con la garganta mirando hacia abajo, lleva la lazada hacia atrás por dentro del bucle que tienes en la aguja. El bucle viejo se resbala por la punta, se cierra alrededor de la lazada y queda como tu primera cadeneta; la lazada es ahora el bucle de la aguja.",
+          "tip": "Gira la garganta hacia abajo antes de tirar para que no se enganche. El bucle viejo se cierra solo alrededor de la lazada: no lo aprietes.",
+          "durationMs": 7200,
           "scene": {
-            "hook": {
-              "rotate": [[0, -4], [0.1, 0]],
-              "translate": [[0.1, [0, 0]], [0.5, [76, 0], "easeInOut"], [0.6, [76, 0]], [0.92, [0, 0], "easeInOut"]]
-            },
+            "hook": { "rotate": [[0, -4], [0.1, 0]], "translate": [[0.1, [0, 0]], [0.5, [76, 0], "easeInOut"], [0.6, [76, 0]], [0.92, [0, 0], "easeInOut"]] },
             "layers": [
-              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [[0.5, [0, 0]], [0.7, [0, 26], "easeOut"]] },
-              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [[0.5, [0, 0]], [0.7, [0, 26], "easeOut"]] },
-              { "id": "bucle-viejo-detras", "role": "yarn", "depth": "back", "d": [[0, "@bucle-detras"], [0.5, "@bucle-detras"], [0.7, "@eslabon-detras", "easeOut"]] },
-              { "id": "hebra-subida", "role": "yarn", "depth": "back", "active": 1, "d": [[0.1, "@hebra-subida"], [0.5, "@hebra-subida-tirar", "easeInOut"]], "opacity": [[0.52, 1], [0.6, 0]] },
-              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "active": [[0.86, 1], [1, 0]], "d": [[0.1, "@hebra-alimentacion"], [0.5, "@hebra-alimentacion-tirar", "easeInOut"], [0.6, "@hebra-alimentacion-tirar"], [0.92, "@hebra-reposo", "easeInOut"]] },
-              { "id": "bucle-nuevo-detras", "role": "yarn", "depth": "back", "active": [[0.86, 1], [1, 0]], "opacity": [[0.5, 0], [0.58, 1]], "d": [[0.5, "@bucle-nuevo-estirado-detras"], [0.6, "@bucle-nuevo-estirado-detras"], [0.92, "@bucle-detras", "easeInOut"]] },
-              { "id": "hebra-garganta", "role": "yarn", "attach": "hook", "d": "@hebra-garganta", "active": 1, "opacity": [[0.52, 1], [0.6, 0]] },
-              { "id": "bucle-nuevo-frente", "role": "yarn", "active": [[0.86, 1], [1, 0]], "opacity": [[0.5, 0], [0.58, 1]], "d": [[0.5, "@bucle-nuevo-estirado-frente"], [0.6, "@bucle-nuevo-estirado-frente"], [0.92, "@bucle-frente", "easeInOut"]] },
-              { "id": "bucle-viejo-frente", "role": "yarn", "d": [[0, "@bucle-frente"], [0.5, "@bucle-frente"], [0.7, "@eslabon-frente", "easeOut"]] },
-              { "id": "flecha", "role": "guide", "d": "@flecha-tirar", "marker": "arrow", "draw": { "from": 0.08, "to": 0.32 }, "opacity": [[0.46, 1], [0.56, 0]] }
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [[0.6, [0, 0]], [0.8, [0, 26], "easeOut"]] },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [[0.6, [0, 0]], [0.8, [0, 26], "easeOut"]] },
+              { "id": "bucle-viejo-detras", "role": "yarn", "depth": "back", "d": [[0, "@bucle-detras"], [0.38, "@bucle-detras"], [0.5, "@bucle-viejo-arrastrado-detras", "easeIn"], [0.62, "@bucle-viejo-cerrado-detras", "easeOut"], [0.8, "@eslabon-detras", "easeInOut"]] },
+              { "id": "hebra-subida", "role": "yarn", "depth": "back", "d": [[0.1, "@hebra-subida"], [0.5, "@hebra-subida-tirar", "easeInOut"], [0.6, "@hebra-subida-tirar"], [0.92, "@bucle-detras", "easeInOut"]], "active": [[0.93, 1], [0.99, 0]] },
+              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "d": [[0.1, "@hebra-alimentacion"], [0.5, "@hebra-alimentacion-tirar", "easeInOut"], [0.6, "@hebra-alimentacion-tirar"], [0.92, "@hebra-reposo", "easeInOut"]], "active": [[0.93, 1], [0.99, 0]] },
+              { "id": "hebra-garganta", "role": "yarn", "d": [[0.1, "@hebra-garganta"], [0.5, "@hebra-garganta-tirar", "easeInOut"], [0.6, "@hebra-garganta-tirar"], [0.92, "@bucle-frente", "easeInOut"]], "active": [[0.93, 1], [0.99, 0]] },
+              { "id": "bucle-viejo-frente", "role": "yarn", "d": [[0, "@bucle-frente"], [0.38, "@bucle-frente"], [0.5, "@bucle-viejo-arrastrado-frente", "easeIn"], [0.62, "@bucle-viejo-cerrado-frente", "easeOut"], [0.8, "@eslabon-frente", "easeInOut"]] },
+              { "id": "foco-garganta", "role": "focus", "attach": "hook", "d": "@anillo-garganta", "opacity": [[0.44, 1], [0.52, 0]] },
+              { "id": "foco-cierre", "role": "focus", "d": "@anillo-cierre", "draw": { "from": 0.52, "to": 0.62 }, "opacity": [[0.78, 1], [0.86, 0]] },
+              { "id": "flecha", "role": "guide", "d": "@flecha-tirar", "marker": "arrow", "draw": { "from": 0.08, "to": 0.3 }, "opacity": [[0.44, 1], [0.52, 0]] }
             ],
             "callouts": [
-              { "id": "tirar", "text": "Tira a través del bucle", "at": [214, 82], "show": { "from": 0.12, "to": 0.56 } },
-              { "id": "logro", "text": "¡1 cadeneta!", "at": [168, 159], "placement": "right", "tone": "success", "show": { "from": 0.84 } }
+              { "id": "tirar", "text": "La garganta pasa por dentro del bucle", "at": [214, 82], "show": { "from": 0.1, "to": 0.48 } },
+              { "id": "cierre", "text": "El bucle viejo se cierra", "at": [178, 132], "placement": "right", "show": { "from": 0.54, "to": 0.82 } },
+              { "id": "logro", "text": "¡1 cadeneta!", "at": [168, 159], "placement": "right", "tone": "success", "show": { "from": 0.86 } }
             ]
           }
         },
@@ -229,24 +236,24 @@
           "title": "Repite: otra lazada",
           "instruction": "Sube la pinza de la mano izquierda hasta justo debajo de la aguja y vuelve a hacer una lazada, de atrás hacia adelante.",
           "tip": "Sujetar cerca de la aguja da cadenetas parejas: recoloca la pinza cada dos o tres puntos.",
-          "durationMs": 4200,
+          "durationMs": 4600,
           "scene": {
-            "hook": { "rotate": [[0.1, 0], [0.4, -4]] },
+            "hook": { "rotate": [[0.12, 0], [0.42, -4]] },
             "layers": [
               { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [0, 26] },
               { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [0, 26] },
               { "id": "eslabon-detras", "role": "yarn", "depth": "back", "d": "@eslabon-detras" },
               { "id": "bucle-detras", "role": "yarn", "depth": "back", "d": "@bucle-detras" },
-              { "id": "hebra-trabajo", "role": "yarn", "depth": "back", "d": "@hebra-reposo", "active": [[0, 0], [0.12, 1]], "opacity": [[0.22, 1], [0.42, 0]] },
-              { "id": "hebra-subida", "role": "yarn", "depth": "back", "d": "@hebra-subida", "active": 1, "draw": { "from": 0.22, "to": 0.42 } },
-              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "d": "@hebra-alimentacion", "active": 1, "draw": { "from": 0.5, "to": 0.76 } },
-              { "id": "hebra-garganta", "role": "yarn", "attach": "hook", "d": "@hebra-garganta", "active": 1, "draw": { "from": 0.4, "to": 0.52 } },
+              { "id": "hebra-subida", "role": "yarn", "depth": "back", "d": [[0.18, "@hebra-tramo-1"], [0.6, "@hebra-subida", "easeInOut"]], "active": [[0, 0], [0.12, 1]] },
+              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "d": [[0.18, "@hebra-tramo-3"], [0.6, "@hebra-alimentacion", "easeInOut"]], "active": [[0, 0], [0.12, 1]] },
+              { "id": "hebra-garganta", "role": "yarn", "d": [[0.18, "@hebra-tramo-2"], [0.6, "@hebra-garganta", "easeInOut"]], "active": [[0, 0], [0.12, 1]] },
               { "id": "bucle-frente", "role": "yarn", "d": "@bucle-frente" },
               { "id": "eslabon-frente", "role": "yarn", "d": "@eslabon-frente" },
-              { "id": "flecha", "role": "guide", "d": "@flecha-lazada", "marker": "arrow", "draw": { "from": 0.12, "to": 0.34 }, "opacity": [[0.84, 1], [0.96, 0]] }
+              { "id": "foco-garganta", "role": "focus", "attach": "hook", "d": "@anillo-garganta", "draw": { "from": 0.62, "to": 0.74 } },
+              { "id": "flecha", "role": "guide", "d": "@flecha-lazada", "marker": "arrow", "draw": { "from": 0.12, "to": 0.3 }, "opacity": [[0.66, 1], [0.78, 0]] }
             ],
             "callouts": [
-              { "id": "lazada", "text": "Lazada", "at": [116, 76], "show": { "from": 0.36 } }
+              { "id": "lazada", "text": "Lazada", "at": [116, 76], "show": { "from": 0.3 } }
             ]
           }
         },
@@ -254,30 +261,28 @@
           "id": "tirar-2",
           "phase": "pull-through",
           "title": "Tira otra vez a través del bucle",
-          "instruction": "Tira de la lazada a través del bucle de la aguja. ¡Ya tienes 2 cadenetas! Repite lazada y tirar hasta llegar al número que pida el patrón.",
+          "instruction": "Lleva la lazada por dentro del bucle de la aguja: el bucle viejo se cierra y baja. ¡Ya tienes 2 cadenetas! Repite lazada y tirar hasta llegar al número que pida el patrón.",
           "tip": "Busca un ritmo constante: todas las cadenetas deben medir lo mismo y dejar espacio para meter la punta de la aguja.",
-          "durationMs": 5200,
+          "durationMs": 6400,
           "scene": {
-            "hook": {
-              "rotate": [[0, -4], [0.1, 0]],
-              "translate": [[0.1, [0, 0]], [0.5, [76, 0], "easeInOut"], [0.6, [76, 0]], [0.92, [0, 0], "easeInOut"]]
-            },
+            "hook": { "rotate": [[0, -4], [0.1, 0]], "translate": [[0.1, [0, 0]], [0.5, [76, 0], "easeInOut"], [0.6, [76, 0]], [0.92, [0, 0], "easeInOut"]] },
             "layers": [
-              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [[0.5, [0, 26]], [0.7, [0, 52], "easeOut"]] },
-              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [[0.5, [0, 26]], [0.7, [0, 52], "easeOut"]] },
-              { "id": "eslabon-detras", "role": "yarn", "depth": "back", "d": "@eslabon-detras", "translate": [[0.5, [0, 0]], [0.7, [0, 26], "easeOut"]] },
-              { "id": "bucle-viejo-detras", "role": "yarn", "depth": "back", "d": [[0, "@bucle-detras"], [0.5, "@bucle-detras"], [0.7, "@eslabon-detras", "easeOut"]] },
-              { "id": "hebra-subida", "role": "yarn", "depth": "back", "active": 1, "d": [[0.1, "@hebra-subida"], [0.5, "@hebra-subida-tirar", "easeInOut"]], "opacity": [[0.52, 1], [0.6, 0]] },
-              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "active": [[0.86, 1], [1, 0]], "d": [[0.1, "@hebra-alimentacion"], [0.5, "@hebra-alimentacion-tirar", "easeInOut"], [0.6, "@hebra-alimentacion-tirar"], [0.92, "@hebra-reposo", "easeInOut"]] },
-              { "id": "bucle-nuevo-detras", "role": "yarn", "depth": "back", "active": [[0.86, 1], [1, 0]], "opacity": [[0.5, 0], [0.58, 1]], "d": [[0.5, "@bucle-nuevo-estirado-detras"], [0.6, "@bucle-nuevo-estirado-detras"], [0.92, "@bucle-detras", "easeInOut"]] },
-              { "id": "hebra-garganta", "role": "yarn", "attach": "hook", "d": "@hebra-garganta", "active": 1, "opacity": [[0.52, 1], [0.6, 0]] },
-              { "id": "bucle-nuevo-frente", "role": "yarn", "active": [[0.86, 1], [1, 0]], "opacity": [[0.5, 0], [0.58, 1]], "d": [[0.5, "@bucle-nuevo-estirado-frente"], [0.6, "@bucle-nuevo-estirado-frente"], [0.92, "@bucle-frente", "easeInOut"]] },
-              { "id": "bucle-viejo-frente", "role": "yarn", "d": [[0, "@bucle-frente"], [0.5, "@bucle-frente"], [0.7, "@eslabon-frente", "easeOut"]] },
-              { "id": "eslabon-frente", "role": "yarn", "d": "@eslabon-frente", "translate": [[0.5, [0, 0]], [0.7, [0, 26], "easeOut"]] },
-              { "id": "flecha", "role": "guide", "d": "@flecha-tirar", "marker": "arrow", "draw": { "from": 0.08, "to": 0.32 }, "opacity": [[0.46, 1], [0.56, 0]] }
+              { "id": "cola", "role": "yarn", "depth": "back", "d": "@cola", "translate": [[0.6, [0, 26]], [0.8, [0, 52], "easeOut"]] },
+              { "id": "nudo", "role": "yarn", "depth": "back", "d": "@nudo", "translate": [[0.6, [0, 26]], [0.8, [0, 52], "easeOut"]] },
+              { "id": "eslabon-detras", "role": "yarn", "depth": "back", "d": "@eslabon-detras", "translate": [[0.6, [0, 0]], [0.8, [0, 26], "easeOut"]] },
+              { "id": "bucle-viejo-detras", "role": "yarn", "depth": "back", "d": [[0, "@bucle-detras"], [0.38, "@bucle-detras"], [0.5, "@bucle-viejo-arrastrado-detras", "easeIn"], [0.62, "@bucle-viejo-cerrado-detras", "easeOut"], [0.8, "@eslabon-detras", "easeInOut"]] },
+              { "id": "hebra-subida", "role": "yarn", "depth": "back", "d": [[0.1, "@hebra-subida"], [0.5, "@hebra-subida-tirar", "easeInOut"], [0.6, "@hebra-subida-tirar"], [0.92, "@bucle-detras", "easeInOut"]], "active": [[0.93, 1], [0.99, 0]] },
+              { "id": "hebra-alimentacion", "role": "yarn", "depth": "back", "d": [[0.1, "@hebra-alimentacion"], [0.5, "@hebra-alimentacion-tirar", "easeInOut"], [0.6, "@hebra-alimentacion-tirar"], [0.92, "@hebra-reposo", "easeInOut"]], "active": [[0.93, 1], [0.99, 0]] },
+              { "id": "hebra-garganta", "role": "yarn", "d": [[0.1, "@hebra-garganta"], [0.5, "@hebra-garganta-tirar", "easeInOut"], [0.6, "@hebra-garganta-tirar"], [0.92, "@bucle-frente", "easeInOut"]], "active": [[0.93, 1], [0.99, 0]] },
+              { "id": "bucle-viejo-frente", "role": "yarn", "d": [[0, "@bucle-frente"], [0.38, "@bucle-frente"], [0.5, "@bucle-viejo-arrastrado-frente", "easeIn"], [0.62, "@bucle-viejo-cerrado-frente", "easeOut"], [0.8, "@eslabon-frente", "easeInOut"]] },
+              { "id": "eslabon-frente", "role": "yarn", "d": "@eslabon-frente", "translate": [[0.6, [0, 0]], [0.8, [0, 26], "easeOut"]] },
+              { "id": "foco-garganta", "role": "focus", "attach": "hook", "d": "@anillo-garganta", "opacity": [[0.44, 1], [0.52, 0]] },
+              { "id": "foco-cierre", "role": "focus", "d": "@anillo-cierre", "draw": { "from": 0.52, "to": 0.62 }, "opacity": [[0.78, 1], [0.86, 0]] },
+              { "id": "flecha", "role": "guide", "d": "@flecha-tirar", "marker": "arrow", "draw": { "from": 0.08, "to": 0.3 }, "opacity": [[0.44, 1], [0.52, 0]] }
             ],
             "callouts": [
-              { "id": "logro", "text": "¡2 cadenetas!", "at": [168, 159], "placement": "right", "tone": "success", "show": { "from": 0.84 } }
+              { "id": "cierre", "text": "El bucle viejo se cierra", "at": [178, 132], "placement": "right", "show": { "from": 0.54, "to": 0.82 } },
+              { "id": "logro", "text": "¡2 cadenetas!", "at": [168, 159], "placement": "right", "tone": "success", "show": { "from": 0.86 } }
             ]
           }
         },

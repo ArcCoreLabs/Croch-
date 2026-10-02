@@ -32,10 +32,12 @@ export function SceneLayer({ layer, progress, ids }: SceneLayerProps) {
   });
   const translate = useTransform([x, y], ([tx, ty]: number[]) => (tx !== 0 || ty !== 0 ? `translate(${tx} ${ty})` : ""));
 
-  const { base, active: activeTone } = STAGE_COLORS.yarn;
-  const core = useTransform(active, [0, 1], [base.core, activeTone.core]);
-  const outline = useTransform(active, [0, 1], [base.outline, activeTone.outline]);
-  const sheen = useTransform(active, [0, 1], [base.sheen, activeTone.sheen]);
+  // Azul y amarillo mezclados en RGB dan un gris apagado: el cambio de tono pasa
+  // por un blanco cálido, que se lee como un destello de "puntada terminada".
+  const { base, active: activeTone, glow } = STAGE_COLORS.yarn;
+  const core = useTransform(active, [0, 0.5, 1], [base.core, glow.core, activeTone.core]);
+  const outline = useTransform(active, [0, 0.5, 1], [base.outline, glow.outline, activeTone.outline]);
+  const sheen = useTransform(active, [0, 0.5, 1], [base.sheen, glow.sheen, activeTone.sheen]);
 
   const pathRef = useRef<SVGPathElement>(null);
   const strokeStyle = layer.animatesStroke ? { pathLength: visibleLength, pathOffset: trim } : {};
@@ -45,11 +47,13 @@ export function SceneLayer({ layer, progress, ids }: SceneLayerProps) {
     case "yarn":
       content = (
         <>
+          {/* Contorno con extremos planos: así los tramos que se empalman (la hebra que
+              pasa de detrás a delante de la aguja) no dejan una "costura" oscura. */}
           <motion.path
             d={d}
             fill="none"
             strokeWidth={YARN_WIDTH + YARN_OUTLINE}
-            strokeLinecap="round"
+            strokeLinecap="butt"
             strokeLinejoin="round"
             style={{ ...strokeStyle, stroke: outline }}
           />

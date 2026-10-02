@@ -80,6 +80,7 @@ Las cuatro `phase` son los micro-movimientos que muestra el reproductor: **1 Pos
 - **Fotogramas clave:** `[momento, valor]` o `[momento, valor, "easing"]`, con momentos estrictamente crecientes. El easing se aplica al tramo que **termina** en ese fotograma (por defecto `easeInOut`). Antes del primero y después del último, el valor se mantiene.
 - **Easings:** `linear`, `easeIn`, `easeOut`, `easeInOut`, `backOut`, `anticipate`, `circOut`.
 - **Continuidad:** el estado final de un paso debe ser el inicial del siguiente. Así, avanzar no da saltos. Un test lo verifica para la aguja.
+- **Movimiento, no magia:** cuando un hilo cambia de forma, transforma la **misma capa** (morphing de `d`) en lugar de ocultar una capa y mostrar otra. Si una hebra debe moverse en tramos (por ejemplo, la parte que pasa por delante de la aguja), divide el trazado en tramos que al inicio coincidan exactamente con el hilo en reposo (subdivisión de la curva). Así no hay fundidos que parezcan un salto.
 
 ### Aguja: `scene.hook`
 
