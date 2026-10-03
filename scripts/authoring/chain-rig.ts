@@ -44,7 +44,6 @@ import {
   pullLegA,
   pullLegB,
   pullPhase,
-  rampBlend,
   THROAT_X,
   WRAP_EXIT_LOCAL,
   WRAP_LOCAL,
@@ -156,11 +155,13 @@ export function chainPullState(n: number, D: number, q = 0): RigState {
     };
   }
 
-  // Destino (q = 1): eslabón nuevo en el nivel 0 y bucle nuevo en la garganta.
-  // El bucle viejo baja primero; la aguja vuelve después.
-  const end = withHookAt(ph, COLLAPSE_D);
+  // Destino (q = 1): eslabón nuevo en el nivel 0 y bucle nuevo en la garganta. Eslabón,
+  // bucle y patas cambian a la vez (así las patas no se retuercen); la aguja vuelve más
+  // despacio y todo lo que va en ella la sigue.
   const now = withHookAt(ph, lerp(D, COLLAPSE_D, rate.hook));
-  const loop = wrapToLoop(end, 1);
+  const k = rate.loop;
+  const legA0 = [neck, ...pullLegA(now, approach(neck, wrapWorld(now)[0]), [P(CX - 1, OLD_C[1] + 13, -7)])];
+  const loop = wrapToLoop(now, 1);
   const link = [
     ...legThrough(oldTop, Y0 + OVAL_B - 1, -1),
     ...ovalBody(Y0),
@@ -168,15 +169,14 @@ export function chainPullState(n: number, D: number, q = 0): RigState {
     ...bridgeRise(oldTop, newTop),
   ];
   const legs = newLoopLegs(newTop, loop);
-  const linkedB = linkedLegB(newTop, loop[loop.length - 1]);
-  const old = blendPath([...oldLegA, ...ring, ...oldLegB, ...oldBridge], link, rate.loop, 25);
+  const old = blendPath([...oldLegA, ...ring, ...oldLegB, ...oldBridge], link, k, 25);
   return {
     waypoints: [
       ...waypoints,
       ...tagged(old, { 0: `link-${n}`, 5: "old" }),
-      ...tagged(rampBlend(legA, legs.a, rate.loop, rate.hook, 7)),
-      ...tagged(wrapToLoop(now, rate.hook), { 0: "seat", 11: "wrap-end" }),
-      ...tagged([lerp3(legB[0], linkedB[0], rate.hook), ...lerpPath(legB.slice(1), linkedB.slice(1), rate.loop)]),
+      ...tagged(blendPath(legA0, legs.a, k, 7)),
+      ...tagged(wrapToLoop(now, k), { 0: "seat", 11: "wrap-end" }),
+      ...tagged(lerpPath(pullLegB(now), linkedLegB(newTop, loop), k)),
       ...tagged(BALL),
     ],
     pose: now.pose,

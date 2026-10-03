@@ -16,14 +16,18 @@
  */
 
 import { CX, hookLoopLocal, hookPoint, legThrough, LOOP_X, P, TIP, type HookPose } from "./cadeneta-rig";
-import { add, blendPath, lerp, lerp3, ramp, resample, smooth, type Vec3 } from "./yarn-kit";
+import { add, blendPath, lerp, lerp3, ramp, smooth, type Vec3 } from "./yarn-kit";
 
 /** Recorrido de la aguja al tirar. */
 export const PULL_D = 64;
-/** Mientras el bucle viejo se cierra y baja, la aguja ya vuelve hasta aquí (el bucle nuevo queda encima). */
-export const COLLAPSE_D = 36;
 /** x (en la aguja) de la garganta: ahí queda la lazada y, al cerrarse, el bucle nuevo. */
 export const THROAT_X = 22;
+/**
+ * Mientras el bucle viejo se cierra y baja, la aguja vuelve hasta aquí: el
+ * bucle nuevo (en la garganta) queda justo encima de la cadena y, al asentar,
+ * es la aguja la que se desliza bajo él hasta que el bucle llega al cuerpo.
+ */
+export const COLLAPSE_D = LOOP_X - THROAT_X;
 
 /** Lazada en la garganta (coordenadas de la aguja): asiento (abajo) → delante → arriba → arriba-detrás. */
 export const WRAP_LOCAL: Vec3[] = [
@@ -89,19 +93,6 @@ export function collapseRates(q: number): { loop: number; hook: number } {
   return { loop: 1 - (1 - q) * (1 - q), hook: q * q };
 }
 
-/**
- * Mezcla de dos recorridos con un avance que cambia a lo largo del hilo (de
- * `k0` en el primer punto a `k1` en el último): sirve para tramos que unen
- * dos cosas que se mueven a ritmos distintos (el bucle viejo y la aguja).
- */
-export function rampBlend(a: readonly Vec3[], b: readonly Vec3[], k0: number, k1: number, count = Math.max(a.length, b.length)): Vec3[] {
-  if (k0 <= 0 && k1 <= 0) return a.map((p) => [...p] as Vec3);
-  if (k0 >= 1 && k1 >= 1) return b.map((p) => [...p] as Vec3);
-  const ra = a.length === count ? a : resample(a, count);
-  const rb = b.length === count ? b : resample(b, count);
-  return ra.map((p, i) => lerp3(p, rb[i], lerp(k0, k1, count === 1 ? 0 : i / (count - 1))));
-}
-
 /** Radio del bucle viejo: `base` en el cuerpo, más ancho sobre la cabeza y, ya libre, ceñido a las patas. */
 export function oldLoopRadius(ph: PullPhase, base: number, widenBy: number, closed: number): number {
   return base + widenBy * ph.widen + (closed - base) * ph.free;
@@ -152,15 +143,13 @@ export function pullLegB(ph: PullPhase): Vec3[] {
 }
 
 /**
- * Pata B del bucle nuevo ya cerrado (9 puntos, ver `pullLegB`): del final del
- * bucle baja por delante de la cabeza del eslabón de debajo, entra por su
- * hueco, gira por detrás (puente) y sube hacia el ovillo.
+ * Pata B del bucle nuevo ya cerrado (9 puntos, en correspondencia con
+ * `pullLegB`): del final del bucle baja por delante de la cabeza del eslabón
+ * de debajo, entra por su hueco, gira por detrás (puente) y sube hacia el ovillo.
  */
-export function linkedLegB(top: number, loopEnd: Vec3): Vec3[] {
-  const b = legThrough(top, top, 1);
+export function linkedLegB(top: number, loop: Vec3[]): Vec3[] {
   return [
-    add(lerp3(loopEnd, b[0], 0.5), [0, 0.8, 0]),
-    ...b,
+    ...newLoopLegs(top, loop).b,
     P(CX + 2.4, top + 13.5, -11.5),
     P(CX + 0.6, top + 9, -12.5),
     P(CX - 4, top - 4, -12.5),
@@ -185,18 +174,13 @@ export function wrapToLoop(ph: PullPhase, k: number): Vec3[] {
 /**
  * Patas de un bucle de la aguja: atraviesan el eslabón de debajo (cabeza en
  * `top`) y suben hasta los extremos del bucle, en diagonal si el bucle aún
- * no está encima (en la garganta, con la aguja atrás).
- * `a` sube hasta el principio del bucle; `b` baja desde su final.
+ * no está encima. `a` sube hasta el principio del bucle; `b` baja desde su
+ * final (5 puntos cada una).
  */
 export function newLoopLegs(top: number, loop: Vec3[]): { a: Vec3[]; b: Vec3[] } {
   const a = legThrough(top, top, -1);
   const b = legThrough(top, top, 1);
-  const first = loop[0];
-  const last = loop[loop.length - 1];
-  const headA = a[a.length - 1];
-  const headB = b[0];
-  // Tramo intermedio solo si el bucle queda lejos de la cabeza del eslabón.
-  if (Math.hypot(first[0] - headA[0], first[1] - headA[1]) > 9) a.push(add(lerp3(headA, first, 0.5), [0, 0.8, 0]));
-  if (Math.hypot(last[0] - headB[0], last[1] - headB[1]) > 9) b.unshift(add(lerp3(last, headB, 0.5), [0, 0.8, 0]));
+  a.push(add(lerp3(a[a.length - 1], loop[0], 0.5), [0, 0.8, 0]));
+  b.unshift(add(lerp3(loop[loop.length - 1], b[0], 0.5), [0, 0.8, 0]));
   return { a, b };
 }

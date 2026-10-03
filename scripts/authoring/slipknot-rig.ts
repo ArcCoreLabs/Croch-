@@ -38,7 +38,6 @@ import {
   pullLegA,
   pullLegB,
   pullPhase,
-  rampBlend,
   THROAT_X,
   withHookAt,
   wrapToLoop,
@@ -242,22 +241,23 @@ export function slipPullState(D: number, q = 0): RigState {
   if (q <= 0) parts = { tail, ring, legA, head: wrap, legB };
   else {
     // Destino (q = 1): el aro es el nudo (de frente, bajo la aguja) y la lazada, el bucle
-    // nuevo en la garganta. El aro baja primero; la aguja vuelve después.
+    // nuevo en la garganta. Nudo, bucle y patas cambian a la vez (así las patas no se
+    // retuercen); la aguja vuelve más despacio y todo lo que va en ella la sigue.
     const rate = collapseRates(q);
-    const end = withHookAt(ph, COLLAPSE_D);
     const now = withHookAt(ph, lerp(D, COLLAPSE_D, rate.hook));
     pose = now.pose;
     const knot = knotOval(Y0);
     const knotTop = topOf(Y0);
-    const loop = wrapToLoop(end, 1);
+    const legA0 = pullLegA(now, uUnder(xUnder, wrapWorld(now)[0]), []);
+    const loop = wrapToLoop(now, 1);
     const legs = newLoopLegs(knotTop, loop);
-    const linkedB = linkedLegB(knotTop, loop[loop.length - 1]);
+    const k = rate.loop;
     parts = {
-      tail: blendPath(tail, [...knot.tail, knot.ring[0]], rate.loop, 8).slice(0, -1),
-      ring: blendPath(ring, knot.ring, rate.loop, 9),
-      legA: rampBlend(legA, [...knot.under, ...legs.a], rate.loop, rate.hook, 8),
-      head: wrapToLoop(now, rate.hook),
-      legB: [lerp3(legB[0], linkedB[0], rate.hook), ...lerpPath(legB.slice(1), linkedB.slice(1), rate.loop)],
+      tail: blendPath(tail, [...knot.tail, knot.ring[0]], k, 8).slice(0, -1),
+      ring: blendPath(ring, knot.ring, k, 9),
+      legA: blendPath(legA0, [...knot.under, ...legs.a], k, 8),
+      head: wrapToLoop(now, k),
+      legB: lerpPath(pullLegB(now), linkedLegB(knotTop, loop), k),
     };
   }
   const w: Waypoint[] = [{ p: parts.tail[0], m: 0 }, ...parts.tail.slice(1).map((p) => ({ p }))];
