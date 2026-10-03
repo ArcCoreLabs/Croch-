@@ -77,17 +77,21 @@ describe("validateContentReferences", () => {
   it("detecta geometrías @nombre inexistentes", () => {
     const data = clone();
     const cadeneta = data.techniques.find((t) => t.id === "cadeneta")!;
-    cadeneta.steps[0].scene.layers[0].d = "@no-existe";
+    cadeneta.steps[0].scene.layers.push({ id: "guia", role: "guide", d: "@no-existe" });
     expect(validateContentReferences(data).some((i) => i.message.includes("Geometría no encontrada"))).toBe(true);
   });
 
   it("detecta morphing entre trazados incompatibles", () => {
     const data = clone();
     const cadeneta = data.techniques.find((t) => t.id === "cadeneta")!;
-    cadeneta.steps[0].scene.layers[0].d = [
-      [0, "M 0 0 L 10 10"],
-      [1, "M 0 0 C 1 1, 2 2, 3 3"],
-    ];
+    cadeneta.steps[0].scene.layers.push({
+      id: "guia",
+      role: "guide",
+      d: [
+        [0, "M 0 0 L 10 10"],
+        [1, "M 0 0 C 1 1, 2 2, 3 3"],
+      ],
+    });
     expect(validateContentReferences(data).some((i) => i.message.includes("no son compatibles"))).toBe(true);
   });
 

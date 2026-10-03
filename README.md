@@ -2,7 +2,7 @@
 
 App web para aprender croché y amigurumi **desde cero hasta experto**, con tutoriales SVG interactivos. Cada punto se divide en micro-movimientos (**posición → introducir → lazada → tirar**) que puedes reproducir, pausar o recorrer a mano con un slider.
 
-Sin imágenes, vídeos ni modelos 3D: agujas, hilos, manos, iconos y logo se generan **100 % con código** (SVG + Framer Motion).
+Sin imágenes, vídeos ni modelos 3D en archivos: agujas, hilos, manos, iconos y logo se generan **100 % con código** (SVG + Framer Motion; el hilo del reproductor, como tubo 3D con WebGL).
 
 ## Inicio rápido
 
@@ -15,7 +15,7 @@ Requiere Node.js ≥ 22.12. Más detalles en [docs/SETUP.md](docs/SETUP.md).
 
 ## Qué incluye (Fases 1–3)
 
-- **`<SvgStepPlayer />`:** motor de animación vectorial alimentado por JSON. Hilo base azul, hilo activo amarillo y aguja metálica semitransparente donde el hilo cruza. Controles: paso anterior, reproducir/pausar, siguiente, slider 0–100 %, velocidad y avance automático. Atajos de teclado y soporte de movimiento reducido.
+- **`<SvgStepPlayer />`:** motor de animación alimentado por JSON. El hilo es un único tubo 3D (de la punta de la cola al ovillo) con hebras torcidas, sombras y contorno en cada cruce, así se ve qué tramo pasa por encima y cómo se forma cada nudo. Hilo base azul, tramo activo amarillo que recorre el hilo en el sentido del flujo y aguja metálica semitransparente. Controles: paso anterior, reproducir/pausar, siguiente, slider 0–100 %, velocidad y avance automático. Atajos de teclado y soporte de movimiento reducido.
 - **Lección completa de la cadeneta:** 7 pasos (sujetar, introducir, lazada, tirar, repetir y contar).
 - **Onboarding:**
   - ruta de 0 a 100 con progreso guardado;

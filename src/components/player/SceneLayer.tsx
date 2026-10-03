@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { cancelFrame, frame, motion, useTransform, type MotionValue } from "framer-motion";
 import type { CompiledLayer } from "@/lib/player/types";
 import { AttachedToHook, TransformGroup } from "./HookActor";
@@ -38,16 +38,7 @@ export function SceneLayer({ layer, progress, ids }: SceneLayerProps) {
   let content: React.ReactNode;
   switch (layer.role) {
     case "yarn":
-      content = (
-        <YarnStroke
-          d={d}
-          strokeStyle={strokeStyle}
-          active={active}
-          gradient={layer.gradient}
-          progress={progress}
-          pathRef={pathRef}
-        />
-      );
+      content = <SolidYarn d={d} strokeStyle={strokeStyle} active={active} pathRef={pathRef} />;
       break;
     case "guide":
       content = (
@@ -229,62 +220,8 @@ function YarnPaths({ d, strokeStyle, pathRef, outline, core, sheen }: YarnPaths 
   );
 }
 
-interface YarnStrokeProps extends YarnPaths {
-  active: MotionValue<number>;
-  gradient: CompiledLayer["gradient"];
-  progress: MotionValue<number>;
-}
-
-function YarnStroke({ gradient, ...props }: YarnStrokeProps) {
-  return gradient ? <GradientYarn gradient={gradient} {...props} /> : <SolidYarn {...props} />;
-}
-
-function SolidYarn({ active, d, strokeStyle, pathRef }: Omit<YarnStrokeProps, "gradient" | "progress">) {
+/** Trazo de hilo plano (capas `yarn` con `d`). El hilo principal de una lección va en 3D (`scene.strands`). */
+function SolidYarn({ active, d, strokeStyle, pathRef }: YarnPaths & { active: MotionValue<number> }) {
   const colors = useYarnColors(active);
   return <YarnPaths d={d} strokeStyle={strokeStyle} pathRef={pathRef} {...colors} />;
-}
-
-/**
- * Tramo con degradado de tono (p. ej. el "cuello" donde la hebra de trabajo sale
- * de la labor): el color cambia suave a lo largo del hilo, sin un borde que
- * parezca un corte. El degradado sigue a los extremos del tramo mientras se mueve.
- */
-function GradientYarn({
-  gradient,
-  active,
-  progress,
-  d,
-  strokeStyle,
-  pathRef,
-}: Omit<YarnStrokeProps, "gradient"> & { gradient: NonNullable<CompiledLayer["gradient"]> }) {
-  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-  const startTone = useTrack(progress, gradient.from);
-  const x1 = useTrack(progress, gradient.x1);
-  const y1 = useTrack(progress, gradient.y1);
-  const x2 = useTrack(progress, gradient.x2);
-  const y2 = useTrack(progress, gradient.y2);
-  const start = useYarnColors(startTone);
-  const end = useYarnColors(active);
-
-  const parts = ["outline", "core", "sheen"] as const;
-  return (
-    <>
-      <defs>
-        {parts.map((part) => (
-          <motion.linearGradient key={part} id={`${uid}-${part}`} gradientUnits="userSpaceOnUse" x1={x1} y1={y1} x2={x2} y2={y2}>
-            <motion.stop offset="0" stopColor={start[part]} />
-            <motion.stop offset="1" stopColor={end[part]} />
-          </motion.linearGradient>
-        ))}
-      </defs>
-      <YarnPaths
-        d={d}
-        strokeStyle={strokeStyle}
-        pathRef={pathRef}
-        outline={`url(#${uid}-outline)`}
-        core={`url(#${uid}-core)`}
-        sheen={`url(#${uid}-sheen)`}
-      />
-    </>
-  );
 }

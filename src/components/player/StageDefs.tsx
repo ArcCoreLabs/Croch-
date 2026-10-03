@@ -10,6 +10,7 @@ export function stageIds(prefix: string) {
     background: `${prefix}-bg`,
     glow: `${prefix}-glow`,
     shadow: `${prefix}-shadow`,
+    yarnShadow: `${prefix}-yarn-shadow`,
   };
 }
 
@@ -52,6 +53,9 @@ export function StageDefs({ ids }: { ids: StageIds }) {
       <pattern id={ids.grid} width="16" height="16" patternUnits="userSpaceOnUse">
         <circle cx="1.5" cy="1.5" r="1.1" fill={STAGE_COLORS.grid} />
       </pattern>
+      <filter id={ids.yarnShadow} x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur stdDeviation="2" />
+      </filter>
       <filter id={ids.glow} x="-30%" y="-30%" width="160%" height="160%">
         <feGaussianBlur stdDeviation="2.4" result="blur" />
         <feMerge>

@@ -1,17 +1,16 @@
 import { buildHookGeometry } from "@/lib/svg/hook-geometry";
-import { strandPath } from "@/lib/svg/strand";
 import type {
   CompiledCallout,
-  CompiledGradient,
   CompiledHook,
   CompiledLayer,
   CompiledScene,
   CompiledStep,
+  CompiledStrand,
   EaseName,
   Track,
 } from "@/lib/player/types";
 import type { CalloutInput, CrochetData, HookActorInput, LayerInput, SceneInput, TechniqueInput } from "./schema";
-import { resolveStrandFrames, type Point, type PointSets } from "./strands";
+import { flattenPoints, resolveStrandFrames, type PointSets } from "./strands";
 import { resolvePathRef } from "./validate";
 
 /**
@@ -112,19 +111,31 @@ interface SceneContext {
   where: string;
 }
 
-/** Puntos de cada hilo de la escena como pista (mismos momentos y easings que el autor definió). */
-type StrandTracks = Map<string, Track<readonly Point[]>>;
+export const DEFAULT_STRAND_SPACING = 5;
+const DEFAULT_TONE_FEATHER = 1.5;
 
-function compileStrands(scene: SceneInput, ctx: SceneContext): StrandTracks {
-  const tracks: StrandTracks = new Map();
-  Object.entries(scene.strands ?? {}).forEach(([id, strand]) => {
-    const frames = resolveStrandFrames(strand, ctx.pointSets).map((frame): Frame<readonly Point[]> => {
+/** Hilos 3D de la escena: puntos aplanados por fotograma y tramos activos. */
+function compileStrands(scene: SceneInput, ctx: SceneContext): CompiledStrand[] {
+  return Object.entries(scene.strands ?? {}).map(([id, strand]) => {
+    const frames = resolveStrandFrames(strand, ctx.pointSets).map((frame): Frame<number[]> => {
       if (frame.points === null) throw new ContentCompileError(`${ctx.where}.strands.${id}: pointSet no encontrado "${frame.ref}".`);
-      return frame.ease ? [frame.at, frame.points, frame.ease] : [frame.at, frame.points];
+      const flat = flattenPoints(frame.points);
+      return frame.ease ? [frame.at, flat, frame.ease] : [frame.at, flat];
     });
-    tracks.set(id, framesToTrack(frames));
+    return {
+      id,
+      points: framesToTrack(frames),
+      tone: (strand.tone ?? []).map((span) => ({
+        from: span.range[0],
+        to: span.range[1],
+        feather: span.feather ?? DEFAULT_TONE_FEATHER,
+        value: numberTrack(span.value, 0),
+        mode: span.mode ?? "sweep",
+      })),
+      spacing: strand.spacing ?? DEFAULT_STRAND_SPACING,
+      freeStart: strand.freeStart ?? true,
+    };
   });
-  return tracks;
 }
 
 function resolvePath(value: string, ctx: SceneContext): string {
@@ -133,15 +144,7 @@ function resolvePath(value: string, ctx: SceneContext): string {
   return resolved;
 }
 
-function layerPath(layer: LayerInput, ctx: SceneContext, strands: StrandTracks): Track<string> {
-  if (layer.strand !== undefined) {
-    const strand = strands.get(layer.strand);
-    if (!strand || !layer.range) throw new ContentCompileError(`${ctx.where}: hilo inexistente "${layer.strand}".`);
-    const [from, to] = layer.range;
-    // Cada fotograma del hilo se convierte en el trazado de este tramo.
-    return { at: strand.at, values: strand.values.map((points) => strandPath(points, from, to)), ease: strand.ease };
-  }
-  if (layer.d === undefined) throw new ContentCompileError(`${ctx.where}: la capa no tiene geometría.`);
+function layerPath(layer: LayerInput, ctx: SceneContext): Track<string> {
   if (typeof layer.d === "string") return constantTrack(resolvePath(layer.d, ctx));
   return framesToTrack(
     layer.d.map((f): Frame<string> =>
@@ -150,28 +153,8 @@ function layerPath(layer: LayerInput, ctx: SceneContext, strands: StrandTracks):
   );
 }
 
-/** Extremos del tramo a lo largo del tiempo: orientan el degradado de tono. */
-function layerGradient(layer: LayerInput, strands: StrandTracks): CompiledGradient | null {
-  if (layer.activeFrom === undefined || layer.strand === undefined || !layer.range) return null;
-  const strand = strands.get(layer.strand);
-  if (!strand) return null;
-  const [from, to] = layer.range;
-  const coordinate = (index: number, axis: 0 | 1): Track<number> => ({
-    at: strand.at,
-    values: strand.values.map((points) => points[index][axis]),
-    ease: strand.ease,
-  });
-  return {
-    from: numberTrack(layer.activeFrom, 0),
-    x1: coordinate(from, 0),
-    y1: coordinate(from, 1),
-    x2: coordinate(to, 0),
-    y2: coordinate(to, 1),
-  };
-}
-
-function compileLayer(layer: LayerInput, ctx: SceneContext, strands: StrandTracks): CompiledLayer {
-  const d = layerPath(layer, ctx, strands);
+function compileLayer(layer: LayerInput, ctx: SceneContext): CompiledLayer {
+  const d = layerPath(layer, ctx);
   const draw = drawTrack(layer.draw);
   const trim = numberTrack(layer.trim, 0);
   const translate = pointTracks(layer.translate);
@@ -191,7 +174,6 @@ function compileLayer(layer: LayerInput, ctx: SceneContext, strands: StrandTrack
     translateX: translate.x,
     translateY: translate.y,
     active: numberTrack(layer.active, 0),
-    gradient: layerGradient(layer, strands),
     animatesStroke: !isStatic(draw) || !isStatic(trim) || draw.values[0] !== 1 || trim.values[0] !== 0,
   };
 }
@@ -202,8 +184,9 @@ function compileHook(sceneHook: SceneInput["hook"], ctx: SceneContext): Compiled
   const hooks = ctx.data.tools.hooks;
   const type = hooks.find((h) => h.id === merged.type) ?? hooks[0];
   const [, , width, height] = ctx.viewBox;
-  const tip = merged.tip ?? [width * 0.22, height * 0.38];
-  const geometry = buildHookGeometry(type.profile, { tip, radius: merged.radius ?? 6 });
+  const tip: [number, number] = merged.tip ?? [width * 0.22, height * 0.38];
+  const radius = merged.radius ?? 6;
+  const geometry = buildHookGeometry(type.profile, { tip, radius });
   const translate = pointTracks(merged.translate);
 
   return {
@@ -214,6 +197,9 @@ function compileHook(sceneHook: SceneInput["hook"], ctx: SceneContext): Compiled
       shine: geometry.shine,
       material: type.material,
     },
+    tip,
+    radius,
+    profile: type.profile,
     pivot: merged.pivot ?? geometry.throatPoint,
     translateX: translate.x,
     translateY: translate.y,
@@ -249,13 +235,11 @@ function compileCallout(callout: CalloutInput): CompiledCallout {
 }
 
 export function compileScene(scene: SceneInput, ctx: SceneContext): CompiledScene {
-  const strands = compileStrands(scene, ctx);
-  const layers = scene.layers.map((layer) =>
-    compileLayer(layer, { ...ctx, where: `${ctx.where}.${layer.id}` }, strands),
-  );
+  const layers = scene.layers.map((layer) => compileLayer(layer, { ...ctx, where: `${ctx.where}.${layer.id}` }));
   return {
     viewBox: ctx.viewBox,
     hook: compileHook(scene.hook, ctx),
+    strands: compileStrands(scene, ctx),
     back: layers.filter((l) => l.depth === "back"),
     front: layers.filter((l) => l.depth === "front"),
     callouts: (scene.callouts ?? []).map(compileCallout),

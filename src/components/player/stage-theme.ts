@@ -21,7 +21,7 @@ export const STAGE_COLORS = {
   hand: { fill: "rgba(255, 238, 220, 0.12)", stroke: "rgba(255, 238, 220, 0.42)" },
   metalOutline: "#3f4752",
   /** Opacidad de la aguja: deja ver el hilo que pasa por detrás. */
-  hookOpacity: 0.86,
+  hookOpacity: 1,
   /** Opacidad de los tramos de hilo físicamente ocultos. */
   translucent: 0.42,
 } as const;

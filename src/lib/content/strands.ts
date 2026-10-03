@@ -1,6 +1,6 @@
 import type { EaseName, StrandInput } from "./schema";
 
-export type Point = readonly [number, number];
+export type Point = readonly [number, number] | readonly [number, number, number];
 export type PointSets = Record<string, readonly Point[]> | undefined;
 
 export interface StrandFrame {
@@ -14,7 +14,7 @@ export interface StrandFrame {
 type PointsValue = string | readonly Point[];
 type PointsFrame = readonly [number, PointsValue] | readonly [number, PointsValue, EaseName];
 
-/** Una pista es una lista de fotogramas `[momento, puntos | "@ref", easing?]`; una lista de puntos tiene números. */
+/** Una pista es una lista de fotogramas `[momento, puntos | "@ref", easing?]`; un punto lleva números. */
 function isFrameList(value: unknown): boolean {
   return Array.isArray(value) && value.length > 0 && Array.isArray(value[0]) && typeof value[0][1] !== "number";
 }
@@ -29,4 +29,11 @@ export function resolveStrandFrames(strand: StrandInput, pointSets: PointSets): 
   const raw: unknown = strand.points;
   if (!isFrameList(raw)) return [{ at: 0, ease: undefined, ...resolveValue(raw as PointsValue, pointSets) }];
   return (raw as PointsFrame[]).map((frame) => ({ at: frame[0], ease: frame[2], ...resolveValue(frame[1], pointSets) }));
+}
+
+/** Puntos aplanados x, y, z (z = 0 si el punto es 2D). */
+export function flattenPoints(points: readonly Point[]): number[] {
+  const out: number[] = [];
+  for (const p of points) out.push(p[0], p[1], p.length > 2 ? (p as readonly number[])[2] : 0);
+  return out;
 }

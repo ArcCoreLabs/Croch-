@@ -12,6 +12,7 @@ import {
   type EasingFunction,
   type MotionValue,
 } from "framer-motion";
+import type { EasingResolver } from "@/lib/player/track";
 import type { EaseName, Track } from "@/lib/player/types";
 
 const EASING_FUNCTIONS: Record<EaseName, EasingFunction> = {
@@ -23,6 +24,9 @@ const EASING_FUNCTIONS: Record<EaseName, EasingFunction> = {
   anticipate,
   circOut,
 };
+
+/** Funciones de easing por nombre (las mismas que usan los MotionValues). */
+export const easeByName: EasingResolver = (name) => EASING_FUNCTIONS[name];
 
 /** Convierte una pista compilada en un MotionValue derivado del progreso del paso. */
 export function useTrack<T>(progress: MotionValue<number>, track: Track<T>): MotionValue<T> {

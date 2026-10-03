@@ -9,7 +9,7 @@
  */
 
 import type { EaseName, LayerRole, Phase } from "@/lib/content/schema";
-import type { HookMaterial } from "@/lib/svg/hook-geometry";
+import type { HookMaterial, HookProfile } from "@/lib/svg/hook-geometry";
 
 export type { EaseName, LayerRole, Phase };
 
@@ -21,14 +21,28 @@ export interface Track<T> {
   ease: EaseName[];
 }
 
-/** Degradado de tono a lo largo de un tramo (del primer al último punto). */
-export interface CompiledGradient {
-  /** Tono en el inicio del tramo (el final usa `active`). */
-  from: Track<number>;
-  x1: Track<number>;
-  y1: Track<number>;
-  x2: Track<number>;
-  y2: Track<number>;
+/** Tramo activo (amarillo) de un hilo, en índices de punto: viaja con el material. */
+export interface CompiledToneSpan {
+  from: number;
+  to: number;
+  /** Fundido de los bordes, en puntos. */
+  feather: number;
+  value: Track<number>;
+  /** "sweep": el brillo recorre el tramo en el sentido del hilo; "fade": se funde entero. */
+  mode: ToneMode;
+}
+
+export type ToneMode = "sweep" | "fade";
+
+/** Hilo continuo en 3D: puntos x, y, z aplanados por fotograma. */
+export interface CompiledStrand {
+  id: string;
+  points: Track<number[]>;
+  tone: CompiledToneSpan[];
+  /** Material entre puntos consecutivos (ancla la torsión de las hebras). */
+  spacing: number;
+  /** El primer punto es una punta libre. */
+  freeStart: boolean;
 }
 
 export interface CompiledLayer {
@@ -48,7 +62,6 @@ export interface CompiledLayer {
   translateX: Track<number>;
   translateY: Track<number>;
   active: Track<number>;
-  gradient: CompiledGradient | null;
   /** `true` si `draw`/`trim` cambian: activa la animación de trazo. */
   animatesStroke: boolean;
 }
@@ -63,6 +76,10 @@ export interface CompiledHookShape {
 
 export interface CompiledHook {
   shape: CompiledHookShape;
+  /** Punta en reposo, radio y perfil: con ellos el cliente arma el volumen 3D de la aguja. */
+  tip: [number, number];
+  radius: number;
+  profile: HookProfile;
   pivot: [number, number];
   translateX: Track<number>;
   translateY: Track<number>;
@@ -83,6 +100,7 @@ export interface CompiledCallout {
 export interface CompiledScene {
   viewBox: [number, number, number, number];
   hook: CompiledHook | null;
+  strands: CompiledStrand[];
   back: CompiledLayer[];
   front: CompiledLayer[];
   callouts: CompiledCallout[];

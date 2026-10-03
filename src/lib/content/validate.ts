@@ -183,16 +183,20 @@ function validateScene(
     if (lengths.size === 1) strandLengths.set(id, [...lengths][0]);
   });
 
+  Object.entries(scene.strands ?? {}).forEach(([id, strand]) => {
+    const length = strandLengths.get(id);
+    strand.tone?.forEach((span, i) => {
+      const path = `${base}.strands.${id}.tone.${i}`;
+      if (span.range[0] > span.range[1]) push(`${path}.range`, "`range` debe ir de un índice menor a uno mayor.");
+      else if (length !== undefined && span.range[1] > length - 1) {
+        push(`${path}.range`, `El tramo [${span.range.join(", ")}] se sale del hilo (${length} puntos).`);
+      }
+    });
+  });
+
   scene.layers.forEach((layer) => {
     const path = `${base}.layers.${layer.id}`;
-    if (layer.strand !== undefined) {
-      const length = strandLengths.get(layer.strand);
-      if (!scene.strands?.[layer.strand]) push(`${path}.strand`, `Hilo inexistente en la escena: "${layer.strand}".`);
-      else if (length !== undefined && layer.range && layer.range[1] > length - 1) {
-        push(`${path}.range`, `El tramo [${layer.range.join(", ")}] se sale del hilo (${length} puntos).`);
-      }
-    }
-    const rawPaths = layer.d === undefined ? [] : Array.isArray(layer.d) ? layer.d.map((frame) => frame[1]) : [layer.d];
+    const rawPaths = Array.isArray(layer.d) ? layer.d.map((frame) => frame[1]) : [layer.d];
 
     const resolved: string[] = [];
     rawPaths.forEach((value) => {
